@@ -409,6 +409,7 @@ function coCum(cau, cum){
   if(cau.includes(cum)) return true;
   const tuCau = cau.split(" "), tuCum = cum.split(" ");
   if(tuCum.length > tuCau.length) return false;
+  if(/[0-9]/.test(cum)) return false;          // cụm có con số thì phải khớp đúng, "2 tháng 9" không được thành "12 tháng"
   if(cum.length < 8) return false;
   const nguong = Math.min(2, Math.floor(cum.length * 0.2));
   if(nguong < 1) return false;
