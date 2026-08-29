@@ -37,11 +37,9 @@ def lay_cau_tra_loi():
     ds.append(("mo-trinh-duyet", "Dạ anh chị đang mở bằng ứng dụng Zalo nên micro không dùng được. "
                                  "Anh chị bấm dấu ba chấm ở góc trên bên phải, rồi chọn mở bằng trình duyệt, "
                                  "là nói chuyện với em được ngay ạ."))
-    ds.append(("khong-nghe-duoc", "Dạ trình duyệt này chưa nghe được giọng nói. "
-                                  "Anh chị mở trang này bằng Chrome hoặc Safari giúp em, hoặc bấm nút gọi ở phía dưới, "
-                                  "có nhân viên nói chuyện trực tiếp với anh chị ạ."))
-    ds.append(("nghi-tay", "Dạ lâu quá em không nghe thấy gì nên em tạm nghỉ. "
-                           "Khi nào cần, anh chị bấm nút giữa màn hình là em nghe lại ngay ạ."))
+    ds.append(("khong-nghe-duoc", "Dạ để nói chuyện bằng giọng nói với em, anh chị mở trang này bằng Chrome hoặc Safari giúp em ạ. "
+                                  "Hoặc anh chị bấm nút nhắn Zalo, nút gọi ở phía dưới màn hình, nhân viên bên em phản hồi ngay."))
+    ds.append(("nghi-tay", "Dạ khi nào cần hỏi tiếp, anh chị bấm nút giữa màn hình là em nghe ngay ạ."))
     return ds
 
 
