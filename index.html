@@ -499,7 +499,7 @@ const DOI_MAY = [["11","muoi mot"],["12","muoi hai"],["13","muoi ba"],["14","muo
 function demDoiMay(q){
   let dem = 0;
   for(const cach of DOI_MAY){
-    if(cach.some(t => q.split(" ").includes(t))) dem++;
+    if(cach.some(t => coTronVen(q, t))) dem++;      // "mười hai" là hai từ, phải dò cả cụm
   }
   return dem;
 }
