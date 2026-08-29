@@ -24,13 +24,16 @@ def lay_cau_tra_loi():
     """Rút (id, lời đọc) từ index.html."""
     html = open(os.path.join(GOC, "index.html"), encoding="utf-8").read()
     ds = []
-    for khoi in re.finditer(r'id:"([a-z0-9-]+)",\s*\n\s*kw:\[.*?\],\s*\n\s*noi:"(.*?)"\s*\}', html, re.S):
-        ds.append((khoi.group(1), khoi.group(2)))
+    # tách theo từng mục rồi lấy lời đọc đầu tiên của mục đó — không phụ thuộc thứ tự các trường
+    for khoi in re.finditer(r'id:"([a-z0-9-]+)"(.*?)(?=\n\s*\{\s*\n?\s*id:"|\n\];)', html, re.S):
+        loi = re.search(r'noi:"(.*?)",?\s*\n', khoi.group(2), re.S)
+        if loi:
+            ds.append((khoi.group(1), loi.group(1)))
     kh = re.search(r'KHONG_HIEU = \{\s*\n\s*noi:"(.*?)",', html, re.S)
     if kh:
         ds.append(("khong-hieu", kh.group(1)))
     # các câu máy tự nói để báo cho khách, thay cho chữ trên màn hình
-    ds.append(("chao-giong", "Dạ em nghe đây, anh chị hỏi giúp em ạ."))
+    ds.append(("chao-giong", "Dạ em nghe đây ạ."))
     ds.append(("mo-trinh-duyet", "Dạ anh chị đang mở bằng ứng dụng Zalo nên micro không dùng được. "
                                  "Anh chị bấm dấu ba chấm ở góc trên bên phải, rồi chọn mở bằng trình duyệt, "
                                  "là nói chuyện với em được ngay ạ."))
