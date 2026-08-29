@@ -544,6 +544,12 @@ const elHeard = document.getElementById("heard");
 
 let daMoKhoa = false, dangDoc = false;
 let lanCuoiPhat = null, demImLang = null;
+let lichSu = [];                       // vài lượt gần nhất, để máy hiểu khách đang nói tiếp chuyện gì
+const NHO_MAY_LUOT = 6;
+function ghiNho(hoi, dap){
+  lichSu.push({hoi: String(hoi||"").slice(0,200), dap: String(dap||"").slice(0,260)});
+  if(lichSu.length > NHO_MAY_LUOT) lichSu = lichSu.slice(-NHO_MAY_LUOT);
+}
 const IM_LANG_TU_NGHI = 30000;        // im lặng 30 giây thì máy tự nghỉ cho đỡ hao pin và 4G
 
 function hetGioImLang(){
@@ -610,7 +616,7 @@ function traLoi(cauHoi){
     phat(lanCuoiPhat); return;
   }
   const m = timCauTraLoi(cauHoi);
-  if(m){ doc(m.id); return; }
+  if(m){ ghiNho(cauHoi, m.noi); doc(m.id); return; }
   if(q.split(" ").filter(Boolean).length <= 3){     // "em ơi", "alo" — mời hỏi rõ hơn, khỏi tốn lượt
     doc("moi-hoi-lai"); return;
   }
@@ -636,12 +642,12 @@ async function hoiBoTraLoi(cauHoi){
     setTimeout(() => hen.abort(), 12000);      // quá 12 giây thì thôi, đừng bắt khách chờ
     const tra = await fetch(MAY_TRA_LOI, {
       method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({cau: cauHoi}), signal: hen.signal
+      body: JSON.stringify({cau: cauHoi, lich_su: lichSu}), signal: hen.signal
     });
     const kq = await tra.json();
     dangHoi = null;
     if(!dangTroChuyen){ ngungPhat(); return; }     // khách đã dừng thì đừng phát nữa
-    if(kq.tieng){ phat(MAY_TRA_LOI + "/" + kq.tieng); return; }
+    if(kq.tieng){ ghiNho(cauHoi, kq.chu || ""); phat(MAY_TRA_LOI + "/" + kq.tieng); return; }
     doc("khong-hieu");
   }catch(e){
     doc("khong-hieu");                // quá lâu hoặc máy chủ trục trặc: dùng câu dự phòng
@@ -830,6 +836,7 @@ function dungTroChuyen(){
   try{ if(ctx) ctx.close(); }catch(e){}
   dongAm = nguon = may = ctx = null;
   soLanNoiLai = 0;
+  lichSu = [];
 }
 
 document.getElementById("btnNgheLai").addEventListener("click", () => {
