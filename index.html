@@ -605,10 +605,7 @@ async function hoiBoTraLoi(cauHoi){
   guiLenh("im");
   micLabel.textContent = "Đang trả lời…";
   document.body.classList.add("speaking");
-  loa.src = "audio/" + GIONG + "/cho-mot-chut.mp3";
-  loa.loop = false;                      // chỉ phát một lần, nghe lặp lại rất nhàm
-  loa.onended = null;
-  loa.play().catch(() => {});
+  micHint.textContent = "Em đang xem lại cho chính xác…";   // báo bằng chữ, không nói ra tiếng
   try{
     const hen = new AbortController();
     dangHoi = hen;
@@ -619,12 +616,10 @@ async function hoiBoTraLoi(cauHoi){
     });
     const kq = await tra.json();
     dangHoi = null;
-    loa.loop = false;
     if(!dangTroChuyen){ ngungPhat(); return; }     // khách đã dừng thì đừng phát nữa
     if(kq.tieng){ phat(MAY_TRA_LOI + "/" + kq.tieng); return; }
     doc("khong-hieu");
   }catch(e){
-    loa.loop = false;
     doc("khong-hieu");                // quá lâu hoặc máy chủ trục trặc: dùng câu dự phòng
   }
 }
