@@ -526,7 +526,14 @@ function traLoi(cauHoi){
   if(m){ doc(m.id); return; }
   if(q.split(" ").filter(Boolean).length <= 3){     // "em ơi", "alo" — mời hỏi rõ hơn, khỏi tốn lượt
     doc("moi-hoi-lai"); return;
-  }         // có sẵn: phát ngay, giọng thu sẵn, đúng từng chữ
+  }
+  // Những chuyện cửa hàng chưa công bố thì trả lời ngay bằng câu thu sẵn,
+  // khỏi chờ bộ trả lời bảy giây rồi cũng ra đúng câu đó.
+  const DAY_VE_ZALO = ["sua may","sua chua","thay man","thay pin","ship","giao hang","van chuyen",
+    "doi tra","tra lai","mo cua","may gio","dong cua","con hang","con may","mau nao","mau den",
+    "mau trang","dung luong","con bao nhieu cai","nguyen seal","may moi","android","samsung",
+    "oppo","xiaomi","vivo","realme","bao hiem","tra tien mat","chuyen khoan"];
+  if(DAY_VE_ZALO.some(t => coCum(q, t) || q.includes(t))){ doc("khong-hieu"); return; }         // có sẵn: phát ngay, giọng thu sẵn, đúng từng chữ
   hoiBoTraLoi(cauHoi);                // câu lạ: nhờ bộ trả lời của cửa hàng
 }
 
