@@ -734,7 +734,7 @@ async function batDauNghe(){
     }
     if(typeof tin.cau === "string" && tin.cau.trim()){
       const cau = tin.cau.slice(0, 400);            // câu quá dài thì cắt, khỏi treo máy
-      try{ elHeard.textContent = "“" + cau + "”"; }catch(e){}
+      // không hiện chữ máy nghe được: nghe sai một chữ là khách mất tin ngay
       traLoi(cau);
       return;
     }
