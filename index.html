@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0E6F63">
 <title>Hỏi Hưng Phát Bằng Giọng Nói</title>
-<meta name="description" content="Bấm nút, nói câu hỏi về Hưng Phát Luxury — iPhone đã qua sử dụng (iPhone 99%) kiểm định ZIN, bảo hành, thu cũ đổi mới, trả góp, 4 chi nhánh Kiên Giang — nghe trả lời bằng giọng nói tiếng Việt.">
+<meta name="description" content="Bấm nút, nói câu hỏi về Hưng Phát Luxury — iPhone 99% kiểm định ZIN, bảo hành, thu cũ đổi mới, trả góp, 4 chi nhánh Kiên Giang — nghe trả lời bằng giọng nói tiếng Việt.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Hỏi Hưng Phát">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -208,6 +208,7 @@
 </head>
 <body>
 
+
 <header class="top">
   <div class="wrap">
     <div class="brand">
@@ -250,10 +251,6 @@
 </nav>
 
 <script>
-/* ============ KHO CÂU TRẢ LỜI ============
-   noi  = lời đọc thành tiếng (ngắn, dễ nghe)
-   hien = phần hiển thị trên màn hình
-   kw   = từ khoá nhận dạng câu hỏi (viết không dấu)                       */
 const KHO = [
   {
     id:"chi-nhanh", goi:"Có bao nhiêu chi nhánh, ở đâu?",
@@ -388,10 +385,12 @@ const KHONG_HIEU = {
   hien:'Dạ câu này em chưa có sẵn câu trả lời. Anh/chị bấm <b>Gọi 0788 068 068</b> ở thanh dưới màn hình, hoặc nhắn Zalo — có nhân viên trả lời trực tiếp cho nhanh.'
 };
 
-/* ============ TIỆN ÍCH ============ */
-const boDau = s => (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[đĐ]/g,"d").toLowerCase().replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
 
-// đo độ lệch giữa hai chữ — để tha thứ cho chỗ máy nghe hụt một hai âm
+/* ============ TIỆN ÍCH SO KHỚP CÂU HỎI ============ */
+const boDau = s => (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[đĐ]/g,"d")
+  .toLowerCase().replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
+
+// đo độ lệch giữa hai chữ — tha thứ cho chỗ máy nghe hụt một hai âm
 function lechChu(a, b){
   if(a === b) return 0;
   const m = a.length, n = b.length;
@@ -410,7 +409,7 @@ function coCum(cau, cum){
   if(cau.includes(cum)) return true;
   const tuCau = cau.split(" "), tuCum = cum.split(" ");
   if(tuCum.length > tuCau.length) return false;
-  if(cum.length < 8) return false;              // cụm ngắn phải khớp đúng, không đoán mò
+  if(cum.length < 8) return false;
   const nguong = Math.min(2, Math.floor(cum.length * 0.2));
   if(nguong < 1) return false;
   for(let i = 0; i + tuCum.length <= tuCau.length; i++){
@@ -419,35 +418,36 @@ function coCum(cau, cum){
   }
   return false;
 }
-
 function timCauTraLoi(cauHoi){
   const q = boDau(cauHoi);
   if(!q) return null;
-  let best = null, bestScore = 0;
+  let best = null, diemCao = 0;
   for(const m of KHO){
-    let score = 0;
-    for(const [tu, diem] of m.kw){ if(coCum(q, tu)) score += diem; }
-    // cộng điểm nếu trùng chữ trong câu gợi ý
-    const goi = boDau(m.goi);
-    for(const w of q.split(" ")) if(w.length>3 && goi.includes(w)) score += 0.6;
-    if(score > bestScore){ bestScore = score; best = m; }
+    let diem = 0;
+    for(const [tu, d] of m.kw) if(coCum(q, tu)) diem += d;
+    if(diem > diemCao){ diemCao = diem; best = m; }
   }
-  return bestScore >= 4 ? best : null;
+  return diemCao >= 4 ? best : null;
 }
 
-/* ============ ĐỌC THÀNH TIẾNG ============
-   Ưu tiên file MP3 thu sẵn bằng giọng Vbee (Phan Hoa / Trang).
-   Máy nào không tải được file thì tự chuyển sang giọng có sẵn của điện thoại. */
+/* ============ ĐỊA CHỈ MÁY CHỦ ============ */
+const MAY_NGHE_WS  = "wss://162-4-176-92.sslip.io/nghe";   // nghe liên tục
+const MAY_TRA_LOI  = "https://162-4-176-92.sslip.io/hoi";  // trả lời câu ngoài 21 chủ đề
+const GIONG = "trang";
+
+/* ============ PHÁT TIẾNG ============ */
 const loa = document.getElementById("loa");
-const giongChon = "trang";   // giọng cố định, khách không phải chọn
-let voiceVi = undefined, tatTieng = false, ttsWarmed = false, daMoKhoaLoa = false;
-const tocDo = 1;
+const micBtn = document.getElementById("micBtn");
+const micLabel = document.getElementById("micLabel");
+const micHint = document.getElementById("micHint");
+const elNote = document.getElementById("note");
+const elNoteText = document.getElementById("noteText");
 
-function duongDanMp3(id){ return "audio/" + giongChon + "/" + id + ".mp3"; }
+let daMoKhoa = false, dangDoc = false;
 
-function moKhoaLoa(){            // iPhone chỉ cho phát tiếng nếu bắt đầu từ cú bấm của người dùng
-  if(daMoKhoaLoa) return;
-  daMoKhoaLoa = true;
+function moKhoaLoa(){                 // iPhone cần cú bấm đầu tiên mới cho phát tiếng
+  if(daMoKhoa) return;
+  daMoKhoa = true;
   try{
     loa.muted = true;
     const p = loa.play();
@@ -455,80 +455,48 @@ function moKhoaLoa(){            // iPhone chỉ cho phát tiếng nếu bắt �
     else { loa.pause(); loa.muted = false; }
   }catch(e){ loa.muted = false; }
 }
-loa.addEventListener("play",  () => document.body.classList.add("speaking"));
-loa.addEventListener("ended", () => document.body.classList.remove("speaking"));
-loa.addEventListener("pause", () => document.body.classList.remove("speaking"));
-function layGiongViet(){
-  if(voiceVi !== undefined) return voiceVi;
-  const vs = (window.speechSynthesis ? speechSynthesis.getVoices() : []) || [];
-  const cands = vs.filter(v => (v.lang||"").toLowerCase().startsWith("vi"));
-  if(!cands.length) return null;
-  const diem = v => { let s=0; const n=(v.name||"").toLowerCase();
-    if(/neural|premium|enhanced|natural/.test(n)) s+=6;
-    if(/google/.test(n)) s+=4;
-    if(/linh|nam minh|hoai my/.test(n)) s+=3;
-    if(v.localService === false) s+=1; return s; };
-  cands.sort((a,b)=>diem(b)-diem(a));
-  voiceVi = cands[0];
-  return voiceVi;
-}
-function warmTTS(){
-  if(ttsWarmed || !("speechSynthesis" in window)) return;
-  ttsWarmed = true;
-  try{ const u = new SpeechSynthesisUtterance(" "); u.volume = 0; speechSynthesis.speak(u); }catch(e){}
-}
-function doc(text, id){
-  if(tatTieng) return;
-  ngungDoc();
-  if(id){
-    try{
-      loa.src = duongDanMp3(id);
-      loa.playbackRate = tocDo;
-      loa.onended = ngheTiep;
-      setTimeout(theoDoiCatLoi, 700);   // chờ máy vào giọng rồi mới dỏng tai, tránh tự cắt lời mình
-      const p = loa.play();
-      if(p && p.catch) p.catch(() => docBangGiongMay(text));
-      loa.onerror = () => docBangGiongMay(text);
-      return;
-    }catch(e){ /* rơi xuống giọng máy */ }
-  }
-  docBangGiongMay(text);
-}
 
-function docBangGiongMay(text){
-  if(tatTieng || !("speechSynthesis" in window) || !text) return;
-  try{
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "vi-VN";
-    const v = layGiongViet(); if(v) u.voice = v;
-    u.rate = tocDo; u.pitch = 1;
-    u.onstart = () => document.body.classList.add("speaking");
-    u.onend = u.onerror = () => { document.body.classList.remove("speaking"); ngheTiep(); };
-    speechSynthesis.speak(u);
-  }catch(e){}
+function phat(duongDan, xongThi){
+  ngungPhat();
+  dangDoc = true;
+  document.body.classList.add("speaking");
+  micLabel.textContent = "Đang trả lời…";
+  guiLenh("im");                      // trong lúc máy nói thì đừng nghe tiếng loa của chính mình
+  setTimeout(() => { if(dangDoc) guiLenh("nghe"); }, 1200);   // sau đó nghe lại, khách chen ngang được
+  loa.src = duongDan;
+  loa.onended = loa.onerror = () => { xongPhat(); if(xongThi) xongThi(); };
+  const p = loa.play();
+  if(p && p.catch) p.catch(() => { xongPhat(); if(xongThi) xongThi(); });
 }
-function ngungDoc(){
-  clearInterval(khungCatLoi);
-  try{ speechSynthesis.cancel(); }catch(e){}
+function xongPhat(){
+  dangDoc = false;
+  document.body.classList.remove("speaking");
+  if(dangTroChuyen){
+    micLabel.textContent = "Đang nghe…";
+    micHint.textContent = "Anh/chị cứ hỏi tiếp, khỏi bấm gì nữa.";
+    guiLenh("nghe");
+  }
+}
+function ngungPhat(){
   try{ loa.pause(); loa.currentTime = 0; }catch(e){}
+  dangDoc = false;
   document.body.classList.remove("speaking");
 }
+function doc(id){ phat("audio/" + GIONG + "/" + id + ".mp3"); }
 
-/* ============ TRẢ LỜI (chỉ bằng giọng, không hiện chữ) ============ */
+/* ============ TRẢ LỜI ============ */
 function traLoi(cauHoi){
   const m = timCauTraLoi(cauHoi);
-  if(m){ doc(m.noi, m.id); return m.id; }   // có sẵn trong 21 chủ đề: phát ngay, giọng thu sẵn
-  hoiBoTraLoi(cauHoi);                       // câu lạ: nhờ bộ trả lời của cửa hàng
-  return null;
+  if(m){ doc(m.id); return; }         // có sẵn: phát ngay, giọng thu sẵn, đúng từng chữ
+  hoiBoTraLoi(cauHoi);                // câu lạ: nhờ bộ trả lời của cửa hàng
 }
 
-// Câu ngoài 21 chủ đề: gửi lên máy chủ, ở đó chỉ được dùng hồ sơ cửa hàng để trả lời.
 async function hoiBoTraLoi(cauHoi){
-  khoaTai = true;
-  dungGhiAm();
+  dangDoc = true;
+  guiLenh("im");
   micLabel.textContent = "Đang trả lời…";
-  const dem = new Audio("audio/" + giongChon + "/cho-mot-chut.mp3");   // câu đệm cho đỡ trống
+  document.body.classList.add("speaking");
+  const dem = new Audio("audio/" + GIONG + "/cho-mot-chut.mp3");
   dem.play().catch(() => {});
   try{
     const tra = await fetch(MAY_TRA_LOI, {
@@ -537,182 +505,161 @@ async function hoiBoTraLoi(cauHoi){
     });
     const kq = await tra.json();
     try{ dem.pause(); }catch(e){}
-    if(kq.tieng){
-      ngungDoc();
-      trangThaiDoc();
-      loa.src = MAY_TRA_LOI.replace(/\/hoi$/, "/hoi/") + kq.tieng;
-      loa.onended = ngheTiep;
-      loa.onerror = () => doc(KHONG_HIEU.noi, "khong-hieu");
-      setTimeout(theoDoiCatLoi, 700);
-      const p = loa.play();
-      if(p && p.catch) p.catch(() => doc(KHONG_HIEU.noi, "khong-hieu"));
-      return;
-    }
-    doc(KHONG_HIEU.noi, "khong-hieu");
+    if(kq.tieng){ phat(MAY_TRA_LOI + "/" + kq.tieng); return; }
+    doc("khong-hieu");
   }catch(e){
     try{ dem.pause(); }catch(err){}
-    doc(KHONG_HIEU.noi, "khong-hieu");      // máy chủ trục trặc thì dùng câu dự phòng thu sẵn
+    doc("khong-hieu");                // máy chủ trục trặc thì dùng câu dự phòng thu sẵn
   }
 }
 
-function trangThaiDoc(){ document.body.classList.add("speaking"); }
+/* ============ NGHE LIÊN TỤC ============
+   Micro mở một lần rồi truyền âm thanh thẳng lên máy chủ.
+   Máy chủ tự biết khách bắt đầu nói và ngừng nói, cắt đúng câu rồi phiên âm.
+   Micro không bao giờ tắt giữa chừng nên không mất câu.                       */
+let dangTroChuyen = false, ws = null, dongAm = null, ctx = null, nguon = null, may = null;
+let lanCuoiNoi = 0;
 
-/* ============ TAI THỨ HAI: ghi âm gửi máy chủ nghe ============
-   Bộ nghe sẵn của trình duyệt nhiều máy nghe rất tệ. Nên song song với nó,
-   web tự ghi âm rồi gửi lên máy chủ của cửa hàng phiên âm — chuẩn hơn hẳn.
-   Bên nào ra câu khớp được chủ đề trước thì lấy bên đó.                      */
-const MAY_NGHE = "https://162-4-176-92.sslip.io/stt";
-const MAY_TRA_LOI = "https://162-4-176-92.sslip.io/hoi";   // câu ngoài 21 chủ đề thì nhờ bộ trả lời
-
-let dongAm = null, mayGhi = null, mieng = [], doAm = null, khungDo = null;
-let dangGhi = false, imLangTu = 0, coTiengTo = false, luotHienTai = 0, mayChuHong = false;
-
-const IM_LANG_MS = 550;      // ngừng nói chừng này là chốt câu gửi đi luôn
-const TO_TOI_THIEU = 0.012;  // dưới mức này coi như im lặng
-const DAI_TOI_DA_MS = 12000; // một câu dài nhất 12 giây
-const TO_CAT_LOI = 0.055;    // khách nói chen to cỡ này thì máy ngưng nói để nghe
-const CAT_LOI_MS = 260;      // nói chen liên tục chừng này mới tính, tránh tiếng động vặt
-
-let khungCatLoi = null, catLoiTu = 0;
-
-// Trong lúc máy đang trả lời vẫn dỏng tai: khách chen ngang là ngưng nói, nghe khách luôn.
-function theoDoiCatLoi(){
-  clearInterval(khungCatLoi);
-  if(!doAm) return;
-  catLoiTu = 0;
-  khungCatLoi = setInterval(() => {
-    if(!troChuyen || !dangDoc()){ clearInterval(khungCatLoi); return; }
-    if(mucAm() > TO_CAT_LOI){
-      catLoiTu += 100;
-      if(catLoiTu >= CAT_LOI_MS){
-        clearInterval(khungCatLoi);
-        ngungDoc();                 // im để nghe khách
-        khoaTai = false;
-        micLabel.textContent = "Đang nghe…";
-        batGhiAm();
-      }
-    }else{
-      catLoiTu = 0;
-    }
-  }, 100);
+function guiLenh(lenh){
+  try{ if(ws && ws.readyState === 1) ws.send(lenh); }catch(e){}
 }
+function baoLoi(html){ elNoteText.innerHTML = html; elNote.classList.add("on"); }
+function xoaBao(){ elNote.classList.remove("on"); }
+function trongAppChat(){ return /Zalo|FBAN|FBAV|FB_IAB|Instagram|Line\//i.test(navigator.userAgent || ""); }
 
 async function moMicro(){
   if(dongAm) return true;
   try{
-    const luong = await navigator.mediaDevices.getUserMedia({audio:{
-      echoCancellation:true, noiseSuppression:true, autoGainControl:true
+    dongAm = await navigator.mediaDevices.getUserMedia({audio:{
+      echoCancellation:true, noiseSuppression:true, autoGainControl:true,
+      channelCount:1, sampleRate:48000
     }});
-    dongAm = luong;
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    doAm = ctx.createAnalyser();
-    doAm.fftSize = 1024;
-    ctx.createMediaStreamSource(luong).connect(doAm);
     return true;
   }catch(e){ return false; }
 }
 
-function mucAm(){
-  if(!doAm) return 0;
-  const buf = new Uint8Array(doAm.fftSize);
-  doAm.getByteTimeDomainData(buf);
-  let tong = 0;
-  for(let i = 0; i < buf.length; i++){ const v = (buf[i] - 128) / 128; tong += v * v; }
-  return Math.sqrt(tong / buf.length);
+// Bộ chuyển âm thanh: lấy mẫu từ micro, hạ về 16000 mẫu/giây rồi gửi lên máy chủ
+const MA_WORKLET = `
+class GuiAm extends AudioWorkletProcessor {
+  constructor(){ super(); this.dem = []; this.soDem = 0; }
+  process(dauVao){
+    const kenh = dauVao[0] && dauVao[0][0];
+    if(kenh){
+      this.dem.push(new Float32Array(kenh));
+      this.soDem += kenh.length;
+      if(this.soDem >= 4800){                 // gom đủ 100 mili giây rồi gửi một lần
+        const gop = new Float32Array(this.soDem);
+        let v = 0;
+        for(const k of this.dem){ gop.set(k, v); v += k.length; }
+        this.dem = []; this.soDem = 0;
+        this.port.postMessage(gop, [gop.buffer]);
+      }
+    }
+    return true;
+  }
+}
+registerProcessor('gui-am', GuiAm);
+`;
+
+function haXuong16k(mau, tuTocDo){
+  const ti = tuTocDo / 16000;
+  const dai = Math.floor(mau.length / ti);
+  const ra = new Int16Array(dai);
+  for(let i = 0; i < dai; i++){
+    const v = mau[Math.floor(i * ti)];
+    ra[i] = Math.max(-32768, Math.min(32767, v * 32767));
+  }
+  return ra;
 }
 
-function batGhiAm(){
-  if(dangGhi || !dongAm) return;
-  const kieu = MediaRecorder.isTypeSupported("audio/webm;codecs=opus") ? "audio/webm;codecs=opus"
-             : MediaRecorder.isTypeSupported("audio/mp4") ? "audio/mp4" : "";
-  try{
-    mayGhi = kieu ? new MediaRecorder(dongAm, {mimeType:kieu, audioBitsPerSecond:24000})
-                  : new MediaRecorder(dongAm);
-  }catch(e){ return; }
-  mieng = [];
-  const luot = ++luotHienTai;
-  mayGhi.ondataavailable = ev => { if(ev.data && ev.data.size) mieng.push(ev.data); };
-  mayGhi.onstop = () => guiDiNghe(new Blob(mieng, {type: mayGhi.mimeType || "audio/webm"}), luot);
-  mayGhi.start(250);
-  dangGhi = true; coTiengTo = false; imLangTu = 0;
-  const batDau = Date.now();
-  clearInterval(khungDo);
-  khungDo = setInterval(() => {
-    if(!dangGhi) return;
-    const to = mucAm();
-    if(to > TO_TOI_THIEU){ coTiengTo = true; imLangTu = 0; }
-    else if(coTiengTo){ imLangTu += 100; }
-    if((coTiengTo && imLangTu >= IM_LANG_MS) || Date.now() - batDau > DAI_TOI_DA_MS) dungGhiAm();
-  }, 100);
+async function batDauNghe(){
+  ws = new WebSocket(MAY_NGHE_WS);
+  ws.binaryType = "arraybuffer";
+
+  ws.onmessage = (ev) => {
+    let tin; try{ tin = JSON.parse(ev.data); }catch(e){ return; }
+    if(tin.san_sang){
+      micLabel.textContent = "Đang nghe…";
+      micHint.textContent = "Anh/chị nói câu hỏi đi ạ, nói xong ngưng một chút.";
+      return;
+    }
+    if(tin.bat_dau_noi){
+      lanCuoiNoi = Date.now();
+      if(dangDoc){ ngungPhat(); micLabel.textContent = "Đang nghe…"; }   // khách chen ngang: máy im
+      document.body.classList.add("listening");
+      return;
+    }
+    if(tin.cau){
+      document.body.classList.remove("listening");
+      traLoi(tin.cau);
+      return;
+    }
+  };
+
+  ws.onclose = () => {
+    document.body.classList.remove("listening");
+    if(dangTroChuyen) setTimeout(() => { if(dangTroChuyen) batDauNghe(); }, 800);  // rớt mạng thì nối lại
+  };
+  ws.onerror = () => {};
+
+  if(!ctx){
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const blob = new Blob([MA_WORKLET], {type:"application/javascript"});
+    await ctx.audioWorklet.addModule(URL.createObjectURL(blob));
+  }
+  if(ctx.state === "suspended") await ctx.resume();
+  if(!nguon){
+    nguon = ctx.createMediaStreamSource(dongAm);
+    may = new AudioWorkletNode(ctx, "gui-am");
+    may.port.onmessage = (ev) => {
+      if(!ws || ws.readyState !== 1) return;
+      const pcm = haXuong16k(ev.data, ctx.sampleRate);
+      ws.send(pcm.buffer);
+    };
+    nguon.connect(may);
+    may.connect(ctx.destination);        // nối vào loa để worklet luôn chạy (không phát tiếng ra)
+  }
 }
 
-function dungGhiAm(){
-  clearInterval(khungDo);
-  if(!dangGhi) return;
-  dangGhi = false;
-  try{ if(mayGhi && mayGhi.state !== "inactive") mayGhi.stop(); }catch(e){}
-}
-
-async function guiDiNghe(khoiAm, luot){
-  if(!coTiengTo || !khoiAm || khoiAm.size < 2000){
-    if(troChuyen && !khoaTai) batGhiAm();          // chưa nghe thấy gì thì nghe tiếp
+async function batDauTroChuyen(){
+  moKhoaLoa();
+  micLabel.textContent = "Đang mở micro…";
+  const coMic = await moMicro();
+  if(!coMic){
+    micLabel.textContent = "Bấm để nói";
+    if(trongAppChat()){ baoMoTrinhDuyet(); phat("audio/" + GIONG + "/mo-trinh-duyet.mp3"); }
+    else{
+      baoLoi("<b>Chưa được dùng micro</b>Anh/chị bấm vào ổ khoá trên thanh địa chỉ, cho phép micro rồi tải lại trang. Trong lúc chờ, bấm các câu hỏi bên dưới vẫn nghe trả lời bình thường ạ.");
+      phat("audio/" + GIONG + "/khong-nghe-duoc.mp3");
+      veDanhSachCauHoi();
+    }
     return;
   }
-  try{
-    const tra = await fetch(MAY_NGHE, {method:"POST", body:khoiAm});
-    const kq = await tra.json();
-    mayChuHong = false;
-    if(luot !== luotHienTai) return;               // đã có câu mới hơn
-    const cau = (kq.text || "").trim();
-    if(cau && !khoaTai) xuLyCau(cau, [cau], "maychu");
-    else if(troChuyen && !khoaTai) batGhiAm();
-  }catch(e){
-    mayChuHong = true;                             // máy chủ nghe trục trặc: nhường lại cho tai trình duyệt
-    if(troChuyen && !khoaTai) batGhiAm();
-  }
+  dangTroChuyen = true;
+  xoaBao();
+  document.body.classList.add("listening");
+  await batDauNghe();
+  phat("audio/" + GIONG + "/chao-giong.mp3");
 }
 
-/* ============ NGHE (nhận giọng nói) ============ */
-const micBtn   = document.getElementById("micBtn");
-const micLabel = document.getElementById("micLabel");
-const micHint  = document.getElementById("micHint");
-const elHeard  = document.getElementById("heard");
-const elNote   = document.getElementById("note");
-const elNoteText = document.getElementById("noteText");
-
-let rec = null, dangNghe = false, coSTT = false;
-// troChuyen = đang trong phiên nói chuyện: bấm một lần rồi hỏi liên tục,
-// bấm lần nữa mới dừng. Sau mỗi câu trả lời máy tự mở micro nghe tiếp.
-let troChuyen = false, soLanImLang = 0;
-let khoaTai = false, cauDangNghe = "", demNgungNoi = null;
-const TOI_DA_IM_LANG = 3;   // im lặng 3 lượt liên tiếp thì tự nghỉ cho đỡ hao pin
-
-function dangDoc(){
-  const mp3 = !loa.paused && !loa.ended;
-  const may = ("speechSynthesis" in window) && speechSynthesis.speaking;
-  return mp3 || may;
-}
-function ngheTiep(){          // gọi ngay sau khi máy đọc xong câu trả lời
-  if(!troChuyen){ khoaTai = false; return; }
-  micLabel.textContent = "Đang nghe…";
-  micHint.textContent = "Anh/chị cứ hỏi tiếp, khỏi bấm gì nữa.";
-  setTimeout(() => {
-    khoaTai = false;
-    if(troChuyen) batGhiAm();              // ghi âm lại ngay cho câu kế tiếp
-  }, 120);
+function dungTroChuyen(){
+  dangTroChuyen = false;
+  ngungPhat();
+  document.body.classList.remove("listening");
+  micLabel.textContent = "Bấm để nói";
+  micHint.textContent = "Bấm một lần rồi hỏi thoải mái, hỏi xong bấm lại để dừng.";
+  try{ if(ws) ws.close(); }catch(e){}
+  ws = null;
 }
 
-function baoLoi(html){ elNoteText.innerHTML = html; elNote.classList.add("on"); }
-// (nút phụ được gắn thêm vào elNoteText khi cần)
-function xoaBao(){ elNote.classList.remove("on"); }
+micBtn.addEventListener("click", () => {
+  if(!dangTroChuyen){ batDauTroChuyen(); return; }
+  if(dangDoc){ ngungPhat(); guiLenh("nghe"); micLabel.textContent = "Đang nghe…"; return; }  // cắt lời
+  dungTroChuyen();
+});
+window.addEventListener("pagehide", dungTroChuyen);
 
-/* Trình duyệt bên trong app Zalo, Facebook, Messenger không cho dùng micro.
-   Khách bấm link từ Zalo là rơi vào đây, nên phải chỉ đường ra trình duyệt thật. */
-function trongAppChat(){
-  const ua = navigator.userAgent || "";
-  return /Zalo|FBAN|FBAV|FB_IAB|Instagram|Line\//i.test(ua);
-}
-
+/* ============ MỞ TRONG ZALO: MICRO BỊ CHẶN ============ */
 function baoMoTrinhDuyet(){
   baoLoi('<b>Micro không dùng được trong Zalo</b>Anh/chị bấm dấu <b>⋯</b> ở góc trên rồi chọn <b>“Mở bằng trình duyệt”</b> (Chrome hoặc Safari) là nói được. Còn ở đây thì bấm các câu hỏi sẵn bên dưới vẫn nghe trả lời bình thường ạ.');
   const android = /Android/i.test(navigator.userAgent || "");
@@ -720,8 +667,7 @@ function baoMoTrinhDuyet(){
     const mo = document.createElement("a");
     mo.className = "note-btn"; mo.style.display = "inline-block"; mo.style.textDecoration = "none";
     mo.textContent = "🌐 Mở bằng Chrome để nói được";
-    mo.href = "intent://" + location.host + location.pathname +
-              "#Intent;scheme=https;package=com.android.chrome;end";
+    mo.href = "intent://" + location.host + location.pathname + "#Intent;scheme=https;package=com.android.chrome;end";
     elNoteText.appendChild(mo);
   }
   const b = document.createElement("button");
@@ -732,15 +678,14 @@ function baoMoTrinhDuyet(){
     catch(e){ b.textContent = location.href; }
   });
   elNoteText.appendChild(b);
-  veDanhSachCauHoi();      // trong Zalo không nói được thì bấm câu hỏi vẫn nghe trả lời
+  veDanhSachCauHoi();
 }
 
-/* Danh sách câu hỏi bấm để nghe — chỉ hiện khi micro không dùng được (Zalo, máy cũ) */
+/* Danh sách câu hỏi bấm để nghe — hiện khi micro không dùng được */
 function veDanhSachCauHoi(){
   if(document.getElementById("dsCauHoi")) return;
   const khung = document.createElement("div");
-  khung.className = "wrap";
-  khung.id = "dsCauHoi";
+  khung.className = "wrap"; khung.id = "dsCauHoi";
   const nhan = document.createElement("div");
   nhan.className = "sect-label";
   nhan.textContent = "Bấm câu hỏi để nghe trả lời";
@@ -750,193 +695,21 @@ function veDanhSachCauHoi(){
     const b = document.createElement("button");
     b.className = "ask"; b.type = "button";
     b.textContent = m.goi || m.id;
-    b.addEventListener("click", () => { moKhoaLoa(); ngungDoc(); doc(m.noi, m.id); });
+    b.addEventListener("click", () => { moKhoaLoa(); doc(m.id); });
     hop.appendChild(b);
   });
   khung.append(nhan, hop);
   document.querySelector("nav.dock").before(khung);
 }
 
-function khoiTaoNghe(){
-  const SR = null;   // Không dùng bộ nghe của trình duyệt nữa: nó giành micro với bộ ghi âm,
-                     // làm web chỉ nghe được câu đầu rồi câm. Giờ chỉ dùng máy chủ nghe.
-  if(trongAppChat()){
-    micBtn.disabled = true;
-    micLabel.textContent = "Bấm câu hỏi bên dưới";
-    micHint.textContent = "";
-    baoMoTrinhDuyet();
-    return false;
-  }
-  if(!SR){                    // không sao — vẫn còn tai Whisper trên máy chủ cửa hàng
-    coSTT = false;
-    return false;
-  }
-  rec = new SR();
-  rec.lang = "vi-VN";
-  rec.continuous = true;      // giữ micro chạy suốt phiên, khỏi hụt đầu câu
-  rec.interimResults = true;  // nghe tới đâu biết tới đó, khỏi phải chờ chốt câu
-  rec.maxAlternatives = 3;    // máy đoán 3 kiểu, kiểu nào khớp chủ đề thì lấy
-
-  rec.onresult = (e) => {
-    if(khoaTai) return;                 // máy đang nói, bỏ qua để khỏi tự nghe tiếng loa của mình
-    let tam = "", chot = "", cacKieu = [];
-    for(let i = e.resultIndex; i < e.results.length; i++){
-      const kq = e.results[i];
-      if(kq.isFinal){
-        chot += kq[0].transcript;
-        for(let k = 0; k < kq.length; k++) cacKieu.push(kq[k].transcript);
-      }else{
-        tam += kq[0].transcript;
-      }
-    }
-    if(chot.trim()){ xuLyCau(chot.trim(), cacKieu, "trinhduyet"); return; }
-
-    if(tam.trim()){
-      cauDangNghe = tam.trim();
-      clearTimeout(demNgungNoi);
-      // khách ngừng nói khoảng 0,7 giây là trả lời luôn, không chờ máy chốt câu
-      demNgungNoi = setTimeout(() => { if(cauDangNghe) xuLyCau(cauDangNghe, [cauDangNghe], "trinhduyet"); }, 700);
-    }
-  };
-  rec.onerror = (e) => {
-    dungNghe();
-    if(e.error !== "no-speech") troChuyen = false;
-    if(e.error === "not-allowed" || e.error === "service-not-allowed"){
-      if(trongAppChat()){ baoMoTrinhDuyet(); doc("", "mo-trinh-duyet"); }
-      else baoLoi("<b>Chưa được dùng micro</b>Anh/chị bấm vào biểu tượng ổ khoá trên thanh địa chỉ, chọn cho phép micro rồi tải lại trang.");
-    }else if(e.error === "no-speech"){
-      if(troChuyen && ++soLanImLang < TOI_DA_IM_LANG){
-        micHint.textContent = "Em vẫn đang nghe, anh/chị cứ hỏi ạ.";
-        ngheTiep();
-        return;
-      }
-      dungTroChuyen();
-      micHint.textContent = "Lâu quá không nghe thấy gì nên em tạm nghỉ. Bấm nút là em nghe lại ạ.";
-      doc("", "nghi-tay");
-    }else if(e.error === "network"){
-      baoLoi("<b>Mất mạng khi nghe</b>Phần nhận giọng nói cần mạng. Anh/chị kiểm tra 4G hoặc wifi rồi thử lại.");
-    }else{
-      micHint.textContent = "Nghe bị lỗi (" + e.error + "). Anh/chị thử lại nhé.";
-    }
-  };
-  rec.onend = () => {
-    dangNghe = false;
-    if(!troChuyen){ document.body.classList.remove("listening"); return; }
-    // Chrome hay tự ngắt sau ít giây im lặng — mở lại ngay để khách nói lúc nào cũng bắt được
-    setTimeout(() => { if(troChuyen && !dangNghe) batNghe(); }, 80);
-  };
-  coSTT = true;
-  return true;
-}
-
-function xuLyCau(cau, cacKieu, nguon){
-  // tai trình duyệt nghe nhanh nhưng hay sai: chỉ cho nó trả lời khi khớp rõ chủ đề,
-  // nghe lơ mơ thì nhường tai máy chủ (chuẩn hơn) trả lời.
-  if(nguon === "trinhduyet" && dongAm && !mayChuHong){
-    let ro = false;
-    for(const kieu of (cacKieu && cacKieu.length ? cacKieu : [cau])) if(timCauTraLoi(kieu)){ ro = true; break; }
-    if(!ro) return;
-  }
-  clearTimeout(demNgungNoi);
-  cauDangNghe = "";
-  soLanImLang = 0;
-  khoaTai = true;                       // khoá tai trong lúc máy trả lời
-  dungGhiAm();
-  micLabel.textContent = "Đang trả lời…";
-  micHint.textContent = troChuyen ? "Trả lời xong em nghe tiếp ngay, anh/chị cứ hỏi." : "";
-
-  // máy nghe được vài kiểu, lấy kiểu nào khớp chủ đề; không kiểu nào khớp thì dùng kiểu đầu
-  let chon = null;
-  for(const kieu of (cacKieu && cacKieu.length ? cacKieu : [cau])){
-    const m = timCauTraLoi(kieu);
-    if(m){ chon = kieu; break; }
-  }
-  traLoi(chon || cau);
-}
-
-function batNghe(){
-  if(troChuyen && !khoaTai) batGhiAm();
-  if(!coSTT || dangNghe) return;
-  moKhoaLoa();
-  warmTTS();
-  ngungDoc();
-  xoaBao();
-  elHeard.textContent = "";
-  try{ rec.start(); }
-  catch(e){ return; }
-  dangNghe = true;
-  document.body.classList.add("listening");
-  micBtn.setAttribute("aria-label", "Đang nghe, bấm để dừng trò chuyện");
-  micLabel.textContent = "Đang nghe…";
-  micHint.textContent = "Anh/chị nói câu hỏi đi ạ. Nói xong ngưng một chút, khỏi bấm gì nữa.";
-}
-function dungNghe(){          // chỉ tắt micro, không kết thúc phiên trò chuyện
-  dungGhiAm();
-  dangNghe = false;
-  document.body.classList.remove("listening");
-  micBtn.setAttribute("aria-label", troChuyen ? "Bấm để dừng trò chuyện" : "Bấm để nói câu hỏi");
-  if(!troChuyen) micLabel.textContent = "Bấm để nói";
-  try{ rec && rec.stop(); }catch(e){}
-}
-
-async function batDauTroChuyen(){
-  moKhoaLoa();
-  micLabel.textContent = "Đang mở micro…";
-  const coMic = await moMicro();
-  if(!coMic && !coSTT){
-    micLabel.textContent = "Bấm để nói";
-    if(trongAppChat()){ baoMoTrinhDuyet(); doc("", "mo-trinh-duyet"); }
-    else{
-      baoLoi("<b>Chưa được dùng micro</b>Anh/chị bấm vào ổ khoá trên thanh địa chỉ, cho phép micro rồi tải lại trang. Trong lúc chờ, bấm các câu hỏi bên dưới vẫn nghe trả lời bình thường ạ.");
-      doc("", "khong-nghe-duoc");
-      veDanhSachCauHoi();
-    }
-    return;
-  }
-  troChuyen = true;
-  soLanImLang = 0;
-  xoaBao();
-  micLabel.textContent = "Đang trả lời…";
-  doc("Dạ em nghe đây, anh chị hỏi giúp em ạ.", "chao-giong");   // chào xong tự nghe (ngheTiep)
-}
-function dungTroChuyen(){
-  troChuyen = false;
-  khoaTai = false;
-  clearTimeout(demNgungNoi);
-  dungGhiAm();
-  ngungDoc();
-  dungNghe();
-  micLabel.textContent = "Bấm để nói";
-  micHint.textContent = "Bấm một lần rồi hỏi thoải mái, hỏi xong bấm lại để dừng.";
-}
-micBtn.addEventListener("click", () => {
-  if(!troChuyen){ batDauTroChuyen(); return; }
-  if(dangDoc()){          // đang nói dở mà khách bấm: cắt lời, nghe liền
-    ngungDoc();
-    khoaTai = false;
-    if(!dangNghe) batNghe();
-    return;
-  }
-  dungTroChuyen();
-});
-
 /* ============ KHỞI ĐỘNG ============ */
-if("speechSynthesis" in window){
-  speechSynthesis.getVoices();
-  speechSynthesis.onvoiceschanged = () => { voiceVi = undefined; kiemTraGiong(); };
+if(trongAppChat()){
+  micBtn.disabled = true;
+  micLabel.textContent = "Bấm câu hỏi bên dưới";
+  micHint.textContent = "";
+  baoMoTrinhDuyet();
 }
-function kiemTraGiong(){ /* giọng đọc lấy từ file MP3 thu sẵn nên không cần giọng của máy */ }
-khoiTaoNghe();
-setTimeout(kiemTraGiong, 800);
-setInterval(() => {
-  if(!("speechSynthesis" in window)) return;
-  const dangPhat = (speechSynthesis.speaking || (!loa.paused && !loa.ended)) && !dangNghe;
-  document.body.classList.toggle("speaking", dangPhat);
-}, 400);
-setInterval(() => {                        // lưới an toàn: không để phiên tự chết giữa chừng
-  if(troChuyen && !khoaTai && !dangGhi && !dangDoc()) batGhiAm();
-}, 3000);
-window.addEventListener("pagehide", ngungDoc);
+
 </script>
 </body>
 </html>
