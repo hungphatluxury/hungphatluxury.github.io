@@ -3,220 +3,413 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0B1F1C">
+<meta name="theme-color" content="#0E6F63">
 <title>Hỏi Hưng Phát Bằng Giọng Nói</title>
-<meta name="description" content="Bấm micro, nói câu hỏi về Hưng Phát Luxury, nghe trả lời bằng giọng nói.">
+<meta name="description" content="Bấm nút, nói câu hỏi về Hưng Phát Luxury — iPhone đã qua sử dụng (iPhone 99%) kiểm định ZIN, bảo hành, thu cũ đổi mới, trả góp, 4 chi nhánh Kiên Giang — nghe trả lời bằng giọng nói tiếng Việt.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Hỏi Hưng Phát">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@500;600&display=swap">
 
 <style>
   :root{
-    --nen:#0B1F1C;
-    --nen-2:#0E2A25;
-    --ngoc:#1FB89C;
-    --ngoc-dam:#0E6F63;
-    --do:#E05A3C;
-    --vang:#E3A84A;
-    --mo:rgba(255,255,255,.42);
+    --ground:#F3F6F4; --surface:#FFFFFF; --surface-2:#E9EEEB;
+    --ink:#16211F; --ink-soft:#4C5C58; --ink-faint:#7B8985; --line:#D8E0DC;
+    --teal:#0E6F63; --teal-soft:#E2F0ED; --teal-ink:#0A544B;
+    --amber:#C8891B; --amber-soft:#F8EEDA;
+    --alert:#B4462F; --alert-soft:#FBEAE5;
+    --shadow:0 1px 2px rgba(22,33,31,.06), 0 10px 28px -18px rgba(22,33,31,.4);
   }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#0F1614; --surface:#18211F; --surface-2:#212C29;
+      --ink:#E8EFEC; --ink-soft:#AEBEB9; --ink-faint:#7F908B; --line:#2C3936;
+      --teal:#57C7B6; --teal-soft:#152B28; --teal-ink:#8FDCCF;
+      --amber:#E3A84A; --amber-soft:#2A2416;
+      --alert:#E58B72; --alert-soft:#2C1B16;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.9);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0F1614; --surface:#18211F; --surface-2:#212C29;
+    --ink:#E8EFEC; --ink-soft:#AEBEB9; --ink-faint:#7F908B; --line:#2C3936;
+    --teal:#57C7B6; --teal-soft:#152B28; --teal-ink:#8FDCCF;
+    --amber:#E3A84A; --amber-soft:#2A2416;
+    --alert:#E58B72; --alert-soft:#2C1B16;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.9);
+  }
+
   *{box-sizing:border-box}
-  html,body{height:100%}
   body{
-    margin:0;
-    background:
-      radial-gradient(120% 80% at 50% 0%, var(--nen-2) 0%, var(--nen) 62%),
-      var(--nen);
-    color:#EAF3F0;
-    font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:0;overflow:hidden;
-    -webkit-tap-highlight-color:transparent;
-    padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+    margin:0;background:var(--ground);color:var(--ink);
+    font-family:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+    font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased;
+    padding-bottom:86px;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 16px}
+
+  /* ---- đầu trang ---- */
+  header.top{background:var(--surface);border-bottom:1px solid var(--line);padding:18px 0 20px}
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .brand-mark{
+    width:34px;height:34px;flex:none;border-radius:9px;background:var(--teal);color:var(--surface);
+    display:grid;place-items:center;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:15px;
+  }
+  .brand-name{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:17px;letter-spacing:-.01em}
+  .brand-sub{font-size:12.5px;color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;letter-spacing:.03em}
+  h1{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+    font-size:clamp(25px,6vw,34px);line-height:1.14;letter-spacing:-.02em;
+    margin:0 0 8px;text-wrap:balance;
+  }
+  h1 em{font-style:normal;color:var(--teal)}
+  .lede{margin:0;color:var(--ink-soft);font-size:15.5px;max-width:46ch}
+
+  /* ---- khu micro ---- */
+  .mic-zone{display:flex;flex-direction:column;align-items:center;gap:14px;padding:26px 0 8px}
+  .mic-holder{position:relative;width:132px;height:132px;display:grid;place-items:center}
+  .ring{
+    position:absolute;inset:0;border-radius:50%;border:2px solid var(--teal);opacity:0;pointer-events:none;
+  }
+  body.listening .ring{animation:pulse 1.8s ease-out infinite}
+  body.listening .ring:nth-child(2){animation-delay:.6s}
+  @keyframes pulse{0%{transform:scale(.72);opacity:.55}100%{transform:scale(1.08);opacity:0}}
+  @media (prefers-reduced-motion: reduce){body.listening .ring{animation:none;opacity:.3}}
+
+  #micBtn{
+    width:104px;height:104px;border-radius:50%;border:none;cursor:pointer;
+    background:var(--teal);color:var(--surface);font:inherit;
+    display:grid;place-items:center;gap:2px;
+    box-shadow:0 10px 26px -12px rgba(14,111,99,.75);
+    transition:transform .12s ease, background .2s;
+  }
+  #micBtn:active{transform:scale(.96)}
+  #micBtn svg{width:36px;height:36px;fill:currentColor}
+  body.listening #micBtn{background:var(--alert);box-shadow:0 10px 26px -12px rgba(180,70,47,.8)}
+  body.speaking #micBtn{background:var(--amber)}
+  #micBtn:disabled{background:var(--surface-2);color:var(--ink-faint);box-shadow:none;cursor:not-allowed}
+
+  .mic-label{font-weight:600;font-size:17px;text-align:center;min-height:26px}
+  .mic-hint{font-size:14px;color:var(--ink-faint);text-align:center;max-width:34ch;min-height:20px}
+  .heard{
+    font-size:16px;color:var(--ink-soft);text-align:center;font-style:italic;
+    min-height:24px;max-width:38ch;
   }
 
-  /* ----- nút micro ----- */
-  .san{position:relative;display:grid;place-items:center;width:min(78vw,320px);aspect-ratio:1}
-  .song{
-    position:absolute;inset:0;border-radius:50%;
-    border:2px solid var(--ngoc);opacity:0;pointer-events:none;
+  .note{
+    display:none;gap:10px;align-items:flex-start;
+    background:var(--amber-soft);border:1px solid var(--line);border-radius:12px;
+    padding:12px 14px;font-size:14.5px;color:var(--ink);margin:6px 0 0;
   }
-  body.nghe .song{animation:lan 2s cubic-bezier(.2,.6,.35,1) infinite}
-  body.nghe .song:nth-child(2){animation-delay:.66s}
-  body.nghe .song:nth-child(3){animation-delay:1.32s}
-  @keyframes lan{0%{transform:scale(.62);opacity:.5}100%{transform:scale(1);opacity:0}}
+  .note.on{display:flex}
+  .note b{display:block;margin-bottom:2px}
+  .note-btn{
+    margin-top:9px;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;
+    background:var(--teal);color:var(--surface);border:none;border-radius:9px;padding:8px 14px;
+  }
 
-  #nut{
-    position:relative;z-index:2;
-    width:62%;aspect-ratio:1;border:none;border-radius:50%;cursor:pointer;
-    background:linear-gradient(160deg,var(--ngoc) 0%, var(--ngoc-dam) 100%);
-    color:#04120F;display:grid;place-items:center;
-    box-shadow:0 24px 60px -22px rgba(31,184,156,.9), inset 0 -6px 18px rgba(0,0,0,.18);
-    transition:transform .16s ease, background .3s ease, box-shadow .3s ease;
+  /* ---- điều khiển ---- */
+  .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;padding:4px 0 2px}
+  .pick-label{font-size:13.5px;color:var(--ink-faint)}
+  .mini{
+    font:inherit;font-size:13.5px;font-weight:500;background:var(--surface);color:var(--ink-soft);
+    border:1.5px solid var(--line);border-radius:999px;padding:6px 13px;cursor:pointer;
   }
-  #nut:active{transform:scale(.95)}
-  #nut svg{width:44%;height:44%;fill:currentColor}
-  body.cho #nut{animation:tho 3.4s ease-in-out infinite}
-  @keyframes tho{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
-  body.nghe #nut{
-    background:linear-gradient(160deg,#F0785C 0%, var(--do) 100%);
-    box-shadow:0 24px 60px -22px rgba(224,90,60,.9), inset 0 -6px 18px rgba(0,0,0,.18);
-  }
-  body.doc #nut{
-    background:linear-gradient(160deg,#F2C071 0%, var(--vang) 100%);
-    box-shadow:0 24px 60px -22px rgba(227,168,74,.85), inset 0 -6px 18px rgba(0,0,0,.18);
-  }
-  #nut:disabled{background:#22332F;color:#4E625D;box-shadow:none;cursor:not-allowed;animation:none}
-  #nut:focus-visible{outline:3px solid #EAF3F0;outline-offset:6px}
+  .mini[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:var(--surface)}
+  .mini:hover{border-color:var(--teal)}
+  :where(button,a,input):focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 
-  /* ----- thanh sóng khi đang trả lời ----- */
-  .loa{display:flex;gap:5px;align-items:flex-end;height:34px;margin-top:30px;opacity:0;transition:opacity .3s}
-  body.doc .loa{opacity:1}
-  .loa i{width:5px;height:9px;border-radius:3px;background:var(--vang);display:block;animation:nhun 1s ease-in-out infinite}
-  .loa i:nth-child(2){animation-delay:.12s} .loa i:nth-child(3){animation-delay:.24s}
-  .loa i:nth-child(4){animation-delay:.36s} .loa i:nth-child(5){animation-delay:.48s}
-  .loa i:nth-child(6){animation-delay:.6s}  .loa i:nth-child(7){animation-delay:.72s}
+  /* ---- câu hay hỏi ---- */
+  .sect-label{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--ink-faint);padding:22px 0 10px;
+  }
+  .asks{display:flex;flex-wrap:wrap;gap:8px}
+  .ask{
+    font:inherit;font-size:14.5px;text-align:left;cursor:pointer;
+    background:var(--surface);color:var(--ink);border:1.5px solid var(--line);
+    border-radius:999px;padding:8px 15px;display:inline-flex;align-items:center;gap:7px;
+  }
+  .ask:hover{border-color:var(--teal);color:var(--teal-ink)}
+  .ask::before{content:"🔊";font-size:13px;opacity:.6}
+
+  /* ---- thanh sóng khi máy đang trả lời ---- */
+  .song-doc{
+    display:flex;gap:5px;align-items:flex-end;justify-content:center;height:34px;
+    margin:26px auto 0;opacity:0;transition:opacity .3s;
+  }
+  body.speaking .song-doc{opacity:1}
+  .song-doc i{width:5px;height:9px;border-radius:3px;background:var(--amber);display:block;animation:nhun 1s ease-in-out infinite}
+  .song-doc i:nth-child(2){animation-delay:.12s} .song-doc i:nth-child(3){animation-delay:.24s}
+  .song-doc i:nth-child(4){animation-delay:.36s} .song-doc i:nth-child(5){animation-delay:.48s}
+  .song-doc i:nth-child(6){animation-delay:.6s}  .song-doc i:nth-child(7){animation-delay:.72s}
   @keyframes nhun{0%,100%{height:9px}50%{height:32px}}
+  @media (prefers-reduced-motion: reduce){.song-doc i{animation:none}}
 
-  /* ----- chấm trạng thái chờ ----- */
-  .cho-cham{display:flex;gap:7px;margin-top:30px;height:34px;align-items:center;opacity:0;transition:opacity .3s}
-  body.cho .cho-cham{opacity:.55}
-  .cho-cham i{width:7px;height:7px;border-radius:50%;background:var(--mo);display:block}
-
-  /* ----- hai nút liên hệ ----- */
-  .lienhe{position:fixed;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom));display:flex;gap:18px;justify-content:center}
-  .lienhe a{
-    width:56px;height:56px;border-radius:50%;display:grid;place-items:center;
-    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
-    color:#EAF3F0;text-decoration:none;backdrop-filter:blur(6px);
+  /* ---- hội thoại ---- */
+  .talk{display:flex;flex-direction:column;gap:12px;padding-top:4px}
+  .turn{display:flex;gap:10px;align-items:flex-start;animation:rise .3s ease both}
+  .turn.k{flex-direction:row-reverse}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){.turn{animation:none}}
+  .who{
+    width:32px;height:32px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:16px;
+    background:var(--surface-2);border:1px solid var(--line);
   }
-  .lienhe a:active{transform:translateY(1px)}
-  .lienhe svg{width:24px;height:24px;fill:currentColor}
-  .lienhe a:focus-visible{outline:2px solid #EAF3F0;outline-offset:3px}
-
-  @media (prefers-reduced-motion: reduce){
-    .song,#nut,.loa i{animation:none !important}
+  .turn.h .who{background:var(--teal-soft);border-color:var(--teal-soft)}
+  .bubble{max-width:84%;border-radius:14px;padding:12px 15px;box-shadow:var(--shadow)}
+  .turn.k .bubble{background:var(--surface-2);border-bottom-right-radius:5px}
+  .turn.h .bubble{background:var(--surface);border-left:3px solid var(--teal);border-bottom-left-radius:5px}
+  .bubble b{color:var(--teal-ink);font-weight:600}
+  .bubble ul{margin:8px 0 0;padding-left:18px}
+  .bubble li{margin:3px 0}
+  .bubble .lines{font-variant-numeric:tabular-nums}
+  .replay{
+    margin-top:10px;font:inherit;font-size:13px;font-weight:500;background:none;border:none;
+    color:var(--teal-ink);cursor:pointer;padding:7px 0 0;display:block;
+    border-top:1px dotted var(--line);width:fit-content;opacity:.8;
   }
+  .replay:hover{opacity:1;text-decoration:underline}
+  .empty-talk{
+    text-align:center;color:var(--ink-faint);font-size:14.5px;
+    border:1px dashed var(--line);border-radius:14px;padding:18px;
+  }
+
+  /* ---- chi nhánh ---- */
+  .branches{margin-top:26px}
+  .branches h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:18px;margin:0 0 12px}
+  .bgrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+  .branch{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 15px;display:flex;flex-direction:column;gap:3px}
+  .branch .cn{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;letter-spacing:.08em;color:var(--amber)}
+  .branch .addr{font-weight:600;font-size:15px}
+  .branch a{font-family:"IBM Plex Mono",monospace;font-size:14.5px;color:var(--teal-ink);text-decoration:none;font-variant-numeric:tabular-nums}
+  .branch a:hover{text-decoration:underline}
+  footer.foot{margin-top:24px;padding:18px 0 8px;border-top:1px solid var(--line);color:var(--ink-faint);font-size:13px}
+
+  /* ---- thanh dính đáy ---- */
+  .dock{
+    position:fixed;left:0;right:0;bottom:0;z-index:20;
+    background:color-mix(in srgb, var(--surface) 93%, transparent);
+    backdrop-filter:blur(10px);border-top:1px solid var(--line);
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  }
+  .dock-in{max-width:640px;margin:0 auto;display:flex;gap:10px}
+  .btn{
+    flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+    font:inherit;font-weight:600;font-size:15px;text-decoration:none;white-space:nowrap;
+    padding:13px 10px;border-radius:11px;border:1.5px solid transparent;cursor:pointer;
+  }
+  .btn-call{background:var(--teal);color:var(--surface)}
+  .btn-zalo{background:var(--surface);color:var(--teal-ink);border-color:var(--teal)}
+  .btn:active{transform:translateY(1px)}
+  @media (max-width:400px){.btn{font-size:13.5px}}
 </style>
 </head>
-<body class="cho">
+<body>
 
-<div class="san">
-  <span class="song"></span><span class="song"></span><span class="song"></span>
-  <button id="nut" type="button" aria-label="Bấm để nói câu hỏi">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3z"/><path d="M17.3 11a.9.9 0 0 0-1.8 0 3.5 3.5 0 0 1-7 0 .9.9 0 0 0-1.8 0 5.3 5.3 0 0 0 4.4 5.2V19H9.4a.9.9 0 0 0 0 1.8h5.2a.9.9 0 0 0 0-1.8h-1.7v-2.8A5.3 5.3 0 0 0 17.3 11z"/></svg>
-  </button>
-</div>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="brand-mark">HP</div>
+      <div>
+        <div class="brand-name">Hưng Phát Luxury</div>
+        <div class="brand-sub">4 CHI NHÁNH · KIÊN GIANG</div>
+      </div>
+    </div>
+    <h1>Hỏi bằng giọng nói, <em>nghe trả lời liền</em></h1>
+    <p class="lede">Bấm nút micro <b>một lần</b> rồi hỏi thoải mái — ví dụ “Hưng Phát có bao nhiêu chi nhánh?”. Máy trả lời bằng giọng nói rồi tự mở micro nghe câu tiếp; hỏi xong bấm lại để dừng.</p>
 
-<div class="loa" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-<div class="cho-cham" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="mic-zone">
+      <div class="mic-holder">
+        <span class="ring"></span><span class="ring"></span>
+        <button id="micBtn" type="button" aria-label="Bấm để nói câu hỏi">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3z"/><path d="M17.3 11a.9.9 0 0 0-1.8 0 3.5 3.5 0 0 1-7 0 .9.9 0 0 0-1.8 0 5.3 5.3 0 0 0 4.4 5.2V19H9.4a.9.9 0 0 0 0 1.8h5.2a.9.9 0 0 0 0-1.8h-1.7v-2.8A5.3 5.3 0 0 0 17.3 11z"/></svg>
+        </button>
+      </div>
+      <div class="mic-label" id="micLabel">Bấm để nói</div>
+      <div class="heard" id="heard"></div>
+      <div class="mic-hint" id="micHint">Bấm một lần rồi hỏi thoải mái — trả lời xong em tự mở micro nghe câu tiếp. Bấm lại để dừng.</div>
+      <div class="note" id="note"><span>⚠️</span><div id="noteText"></div></div>
 
-<nav class="lienhe">
-  <a href="tel:0788068068" aria-label="Gọi Hưng Phát">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.6a1 1 0 0 1-.25 1l-2.22 2.2z"/></svg>
-  </a>
-  <a href="https://zalo.me/0788068068" target="_blank" rel="noopener" aria-label="Nhắn Zalo cho Hưng Phát">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.9 3 2.8 6.5 2.8 10.9c0 2.5 1.3 4.7 3.4 6.2-.1.9-.5 2.2-1.4 3.3-.2.3 0 .7.4.6 2-.4 3.4-1.2 4.2-1.8.8.2 1.7.3 2.6.3 5.1 0 9.2-3.5 9.2-7.9S17.1 3 12 3z"/></svg>
-  </a>
-</nav>
+      <div class="controls" id="voicePick" role="group" aria-label="Chọn giọng đọc">
+        <span class="pick-label">Giọng đọc:</span>
+        <button class="mini" data-giong="trang" type="button" aria-pressed="true">Trang</button>
+        <button class="mini" data-giong="phanhoa" type="button" aria-pressed="false">Phan Hoa</button>
+      </div>
+
+      <div class="controls">
+        <button class="mini" id="btnSlow" type="button" aria-pressed="false">🐢 Tốc độ: THƯỜNG</button>
+        <button class="mini" id="btnStop" type="button">⏹ Ngưng đọc</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Phần hỏi đáp không hiển thị chữ: khách nói, máy trả lời bằng giọng -->
+<div class="song-doc" id="songDoc" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 
 <audio id="loa" preload="none"></audio>
 
+<nav class="dock" aria-label="Liên hệ nhanh">
+  <div class="dock-in">
+    <a class="btn btn-call" href="tel:0788068068">📞 Gọi 0788 068 068</a>
+    <a class="btn btn-zalo" href="https://zalo.me/0788068068" target="_blank" rel="noopener">💬 Nhắn Zalo</a>
+  </div>
+</nav>
+
 <script>
-/* ================= KHO CÂU TRẢ LỜI =================
-   Không hiển thị chữ — mỗi mục chỉ cần từ khoá để nhận ra câu hỏi
-   và lời đọc (đã thu sẵn thành file MP3 trong thư mục audio/).       */
+/* ============ KHO CÂU TRẢ LỜI ============
+   noi  = lời đọc thành tiếng (ngắn, dễ nghe)
+   hien = phần hiển thị trên màn hình
+   kw   = từ khoá nhận dạng câu hỏi (viết không dấu)                       */
 const KHO = [
-  { id:"chi-nhanh",
+  {
+    id:"chi-nhanh", goi:"Có bao nhiêu chi nhánh, ở đâu?",
     kw:[["bao nhieu chi nhanh",6],["may chi nhanh",6],["chi nhanh",4],["o dau",4],["shop o dau",6],["shop minh o",6],["ban o dau",5],["dia chi",4],["cua hang o dau",5],["gan nha",2],["thanh loc",4],["giong rieng",4],["tac cau",4],["soc xoai",4]],
-    noi:"Dạ Hưng Phát Luxury có bốn chi nhánh tại Kiên Giang. Chi nhánh một ở khu công nghiệp Thạnh Lộc. Chi nhánh hai ở đường Hùng Vương, Giồng Riềng. Chi nhánh ba ở vòng xoay Tắc Cậu. Chi nhánh bốn ở thị trấn Sóc Xoài. Anh chị tiện chỗ nào ghé chỗ đó, chính sách bốn nơi như nhau." },
-  { id:"hotline",
+    noi:"Dạ Hưng Phát Luxury có bốn chi nhánh tại Kiên Giang. Chi nhánh một ở khu công nghiệp Thạnh Lộc. Chi nhánh hai ở đường Hùng Vương, Giồng Riềng. Chi nhánh ba ở vòng xoay Tắc Cậu. Chi nhánh bốn ở thị trấn Sóc Xoài. Anh chị tiện chỗ nào ghé chỗ đó, chính sách bốn nơi như nhau.",
+    hien:'Dạ Hưng Phát Luxury có <b>4 chi nhánh</b> tại Kiên Giang:<ul class="lines"><li><b>CN1</b> — KCN Thạnh Lộc · 0788 068 068</li><li><b>CN2</b> — Đ. Hùng Vương, Giồng Riềng · 0773 068 068</li><li><b>CN3</b> — Vòng xoay Tắc Cậu · 0787 068 068</li><li><b>CN4</b> — Thị trấn Sóc Xoài · 0767 68 66 88</li></ul>Bốn chi nhánh áp dụng chung chính sách bảo hành, cam kết ZIN và thu cũ đổi mới.'
+  },
+  {
+    id:"hotline", goi:"Gọi số nào, nhắn Zalo số nào?",
     kw:[["so dien thoai",6],["hotline",6],["goi so",5],["so may",4],["lien he",4],["zalo",4],["nhan tin",3],["so cua shop",6],["cho xin so",6]],
-    noi:"Dạ anh chị gọi số không bảy tám tám, không sáu tám, không sáu tám. Hoặc nhắn Zalo cũng số đó. Mỗi chi nhánh có một số riêng, gọi số nào cũng có người nghe." },
-  { id:"gioi-thieu",
+    noi:"Dạ anh chị gọi số không bảy tám tám, không sáu tám, không sáu tám. Hoặc nhắn Zalo cũng số đó. Mỗi chi nhánh có một số riêng, gọi số nào cũng có người nghe.",
+    hien:'Dạ anh/chị gọi <b>0788 068 068</b>, hoặc nhắn Zalo cùng số này. Số riêng từng chi nhánh:<ul class="lines"><li>Thạnh Lộc · 0788 068 068</li><li>Giồng Riềng · 0773 068 068</li><li>Tắc Cậu · 0787 068 068</li><li>Sóc Xoài · 0767 68 66 88</li></ul>'
+  },
+  {
+    id:"gioi-thieu", goi:"Hưng Phát Luxury là chỗ nào?",
     kw:[["hung phat la gi",6],["hung phat luxury la",6],["ban gi",4],["cua hang gi",4],["gioi thieu",4],["shop nay",3],["uy tin khong",4],["co dang tin",4]],
-    noi:"Dạ Hưng Phát Luxury là hệ thống bán lẻ i phôn tại Kiên Giang, có bốn chi nhánh. Bên em bán i phôn đã qua sử dụng, quen gọi là i phôn chín mươi chín phần trăm, đã kiểm định còn nguyên linh kiện gốc. Mỗi máy đều có video kiểm tra bên trong, kèm cam kết bằng văn bản và bảo hành một đổi một trong mười hai tháng." },
-  { id:"zin",
+    noi:"Dạ Hưng Phát Luxury là hệ thống bán lẻ i phôn tại Kiên Giang, có bốn chi nhánh. Bên em bán i phôn đã qua sử dụng, quen gọi là i phôn chín mươi chín phần trăm, đã kiểm định còn nguyên linh kiện gốc. Mỗi máy đều có video kiểm tra bên trong, kèm cam kết bằng văn bản và bảo hành một đổi một trong mười hai tháng.",
+    hien:'Dạ Hưng Phát Luxury là hệ thống bán lẻ iPhone tại Kiên Giang, có <b>4 chi nhánh</b>. Bên em bán <b>iPhone đã qua sử dụng (iPhone 99%)</b>, đã kiểm định còn nguyên linh kiện gốc. Mỗi máy đều có <b>video kiểm tra bên trong</b>, kèm cam kết bằng văn bản và bảo hành 1 đổi 1 trong 12 tháng.'
+  },
+  {
+    id:"zin", goi:"ZIN nghĩa là gì? iPhone 99% là sao?",
     kw:[["zin la gi",6],["zin nghia la",6],["the nao la zin",6],["zin la sao",6],["99",4],["chin muoi chin",4],["nguyen ban",4],["linh kien goc",5],["may zin",3],["zin",3]],
-    noi:"Dạ zin nghĩa là máy còn nguyên linh kiện gốc từ nhà sản xuất, chưa bị thay linh kiện ngoài không rõ nguồn gốc. Còn i phôn chín mươi chín phần trăm là máy đã qua sử dụng nhưng còn rất mới. Cái quan trọng không phải vẻ ngoài, mà là bên trong máy còn zin hay không." },
-  { id:"video-zin",
+    noi:"Dạ zin nghĩa là máy còn nguyên linh kiện gốc từ nhà sản xuất, chưa bị thay linh kiện ngoài không rõ nguồn gốc. Còn i phôn chín mươi chín phần trăm là máy đã qua sử dụng nhưng còn rất mới. Cái quan trọng không phải vẻ ngoài, mà là bên trong máy còn zin hay không.",
+    hien:'Dạ <b>ZIN</b> là máy còn nguyên linh kiện gốc từ nhà sản xuất, chưa bị thay linh kiện ngoài không rõ nguồn gốc. <b>iPhone 99%</b> là máy đã qua sử dụng nhưng còn rất mới. Cái quyết định không nằm ở vẻ ngoài mà ở bên trong máy — máy không ZIN thì độ bền, hiệu năng và giá bán lại đều bị ảnh hưởng.'
+  },
+  {
+    id:"video-zin", goi:"Làm sao biết máy còn ZIN?",
     kw:[["lam sao biet",5],["video kiem tra",6],["coi video",5],["bang chung",4],["kiem tra ben trong",6],["mo may",3],["sao biet may zin",6]],
-    noi:"Dạ anh chị đừng tin lời nói, hãy coi video kiểm tra bên trong của đúng chiếc máy mình mua. Mỗi chiếc i phôn đã qua sử dụng bên em bán ra đều được quay video trước khi bàn giao. Em mở cho anh chị coi tại quầy, và gửi luôn qua Zalo để anh chị giữ." },
-  { id:"cam-ket",
+    noi:"Dạ anh chị đừng tin lời nói, hãy coi video kiểm tra bên trong của đúng chiếc máy mình mua. Mỗi chiếc i phôn đã qua sử dụng bên em bán ra đều được quay video trước khi bàn giao. Em mở cho anh chị coi tại quầy, và gửi luôn qua Zalo để anh chị giữ.",
+    hien:'Dạ đừng tin lời nói — anh/chị coi <b>video kiểm tra bên trong của đúng chiếc máy mình mua</b>. Mỗi chiếc iPhone đã qua sử dụng bên em bán ra đều được quay video trước khi bàn giao, mở cho anh/chị coi tại quầy và gửi qua Zalo để anh/chị giữ. Sau này bán lại máy, đưa video đó ra thì người mua tin liền.'
+  },
+  {
+    id:"cam-ket", goi:"Lỡ máy không ZIN thì sao?",
     kw:[["khong zin thi sao",6],["khong zin",5],["hoan tien",5],["tang may",5],["cam ket",4],["den bu",4],["lua",3]],
-    noi:"Dạ bên em cam kết bằng văn bản, có giấy hẳn hoi: nếu máy được xác định không còn nguyên linh kiện gốc so với video kiểm tra lúc bàn giao, thì bên em hoàn lại tiền và tặng luôn chiếc máy đó cho anh chị. Điều kiện là máy chưa qua sửa chữa hay tháo mở ở nơi khác, và hai bên cùng kiểm tra tại chi nhánh. Điều kiện ghi rõ trong giấy cam kết anh chị giữ." },
-  { id:"bao-hanh",
+    noi:"Dạ bên em cam kết bằng văn bản, có giấy hẳn hoi: nếu máy được xác định không còn nguyên linh kiện gốc so với video kiểm tra lúc bàn giao, thì bên em hoàn lại tiền và tặng luôn chiếc máy đó cho anh chị. Điều kiện là máy chưa qua sửa chữa hay tháo mở ở nơi khác, và hai bên cùng kiểm tra tại chi nhánh. Điều kiện ghi rõ trong giấy cam kết anh chị giữ.",
+    hien:'Dạ bên em cam kết <b>bằng văn bản</b>: nếu máy được xác định <b>không còn nguyên linh kiện gốc so với video kiểm tra lúc bàn giao</b> thì <b>hoàn lại tiền và tặng luôn chiếc máy đó</b>.<ul><li>Máy chưa qua sửa chữa hay tháo mở ở nơi khác</li><li>Hai bên cùng kiểm tra tại chi nhánh</li></ul>Điều kiện ghi rõ trong giấy cam kết anh/chị giữ cùng hoá đơn.'
+  },
+  {
+    id:"bao-hanh", goi:"Mua máy được bảo hành những gì?",
     kw:[["bao hanh gi",6],["che do bao hanh",6],["bao hanh",4],["doi 1",5],["mot doi mot",5],["1 doi 1",5],["12 thang",5],["muoi hai thang",5],["bao lau",3],["bao hanh sao",6],["bao hanh the nao",6]],
-    noi:"Dạ bảo hành gồm hai phần. Một là một đổi một trong mười hai tháng cho nguồn, màn hình, main và phây ai đi. Máy đổi là máy cùng dòng, cùng dung lượng, tình trạng tương đương. Hai là bảo hành trọn đời pin, ốp lưng và cường lực. Cả hai đều không tốn phí và không cần tem ngoài. Bảo hành áp dụng cho lỗi phát sinh từ máy, không áp dụng khi máy bị rơi vỡ hay vào nước." },
-  { id:"tem",
+    noi:"Dạ bảo hành gồm hai phần. Một là một đổi một trong mười hai tháng cho nguồn, màn hình, main và phây ai đi. Máy đổi là máy cùng dòng, cùng dung lượng, tình trạng tương đương. Hai là bảo hành trọn đời pin, ốp lưng và cường lực. Cả hai đều không tốn phí và không cần tem ngoài. Bảo hành áp dụng cho lỗi phát sinh từ máy, không áp dụng khi máy bị rơi vỡ hay vào nước.",
+    hien:'Dạ chính sách gồm hai phần:<ul><li><b>1 đổi 1 trong 12 tháng</b> cho nguồn, màn hình, main, Face ID — đổi máy <b>cùng dòng, cùng dung lượng, tình trạng tương đương</b>.</li><li><b>Trọn đời</b> pin, ốp lưng, cường lực.</li></ul>Không tốn phí, không cần tem ngoài. Áp dụng cho lỗi phát sinh từ máy; không áp dụng khi máy rơi vỡ, vào nước hoặc đã tháo mở ở nơi khác.'
+  },
+  {
+    id:"tem", goi:"Rách tem có mất bảo hành không?",
     kw:[["tem",6],["rach tem",6],["mat tem",6],["tem ngoai",6],["con tem",4]],
-    noi:"Dạ không ạ. Bên em bảo hành không cần tem ngoài. Tem rách, tem bong hay mất tem thì quyền lợi của anh chị vẫn còn nguyên. Vì tem ngoài không chứng minh được máy còn zin, cái chứng minh được là video kiểm tra bên trong." },
-  { id:"pin",
+    noi:"Dạ không ạ. Bên em bảo hành không cần tem ngoài. Tem rách, tem bong hay mất tem thì quyền lợi của anh chị vẫn còn nguyên. Vì tem ngoài không chứng minh được máy còn zin, cái chứng minh được là video kiểm tra bên trong.",
+    hien:'Dạ <b>không</b>. Bên em bảo hành <b>không cần tem ngoài</b> — tem rách, bong hay mất thì quyền lợi vẫn còn nguyên. Tem ngoài không chứng minh được máy còn ZIN; cái chứng minh được là video kiểm tra bên trong.'
+  },
+  {
+    id:"pin", goi:"Pin bảo hành sao, khi nào được thay?",
     kw:[["pin",6],["thay pin",6],["chai pin",5],["pin yeu",5],["80",4],["tam muoi",4],["pin tut",4]],
-    noi:"Dạ pin được thay miễn phí trọn đời, chừng nào anh chị còn xài chiếc máy mua tại Hưng Phát. Khi pin xuống dưới tám mươi phần trăm hoặc thấy pin tụt nhanh bất thường thì mang máy qua, kỹ thuật kiểm tra rồi thay miễn phí. Áp dụng cho hao mòn khi dùng bình thường, không áp dụng khi máy bị rơi vỡ, vào nước hay đã tháo mở ở nơi khác." },
-  { id:"op-cuong-luc",
+    noi:"Dạ pin được thay miễn phí trọn đời, chừng nào anh chị còn xài chiếc máy mua tại Hưng Phát. Khi pin xuống dưới tám mươi phần trăm hoặc thấy pin tụt nhanh bất thường thì mang máy qua, kỹ thuật kiểm tra rồi thay miễn phí. Áp dụng cho hao mòn khi dùng bình thường, không áp dụng khi máy bị rơi vỡ, vào nước hay đã tháo mở ở nơi khác.",
+    hien:'Dạ pin <b>thay miễn phí trọn đời</b>, chừng nào anh/chị còn xài chiếc máy mua tại Hưng Phát. Thay khi <b>pin xuống dưới 80%</b> hoặc pin yếu, tụt nhanh bất thường — mỗi lần do kỹ thuật kiểm tra tình trạng thực tế. Áp dụng cho hao mòn khi dùng bình thường; không áp dụng khi máy rơi vỡ, vào nước hoặc đã tháo mở ở nơi khác.'
+  },
+  {
+    id:"op-cuong-luc", goi:"Ốp lưng, cường lực có được thay không?",
     kw:[["op lung",6],["cuong luc",6],["mieng dan",5],["vo kinh",4],["o vang",5],["dan man hinh",5]],
-    noi:"Dạ có ạ. Cường lực bị vỡ hoặc ốp lưng bị ố vàng thì anh chị mang máy qua, em thay miễn phí trọn đời, không tốn phí, không cần tem ngoài." },
-  { id:"roi-be",
+    noi:"Dạ có ạ. Cường lực bị vỡ hoặc ốp lưng bị ố vàng thì anh chị mang máy qua, em thay miễn phí trọn đời, không tốn phí, không cần tem ngoài.",
+    hien:'Dạ có. <b>Cường lực vỡ</b> hoặc <b>ốp lưng ố vàng</b> thì mang máy qua, em thay miễn phí — trọn đời, không tốn phí, không cần tem ngoài.'
+  },
+  {
+    id:"roi-be", goi:"Máy rớt bể, vô nước thì sao?",
     kw:[["roi be",6],["be man",6],["vao nuoc",6],["vo nuoc",6],["lam roi",5],["rot",4],["hu do minh",5]],
-    noi:"Dạ máy hư do rơi, va đập hay vào nước thì nằm ngoài phạm vi một đổi một, vì đó không phải lỗi của máy. Nhưng anh chị cứ mang qua, em kiểm tra rồi báo hướng xử lý và chi phí cụ thể trước khi làm, không tự ý làm rồi tính tiền." },
-  { id:"thu-cu",
+    noi:"Dạ máy hư do rơi, va đập hay vào nước thì nằm ngoài phạm vi một đổi một, vì đó không phải lỗi của máy. Nhưng anh chị cứ mang qua, em kiểm tra rồi báo hướng xử lý và chi phí cụ thể trước khi làm, không tự ý làm rồi tính tiền.",
+    hien:'Dạ hư do rơi, va đập hay vào nước thì <b>nằm ngoài phạm vi 1 đổi 1</b>, vì không phải lỗi của máy. Anh/chị cứ mang qua, em kiểm tra rồi <b>báo hướng xử lý và chi phí trước</b> khi làm.'
+  },
+  {
+    id:"thu-cu", goi:"Có thu máy đang xài để lên đời không?",
     kw:[["thu cu",6],["doi moi",5],["len doi",6],["ban may cu",6],["thu may",6],["may cu",4],["thu lai",5],["dinh gia",5],["doi may",4],["bu tien",5],["ban lai",4]],
-    noi:"Dạ có ạ, Hưng Phát thu cũ đổi mới. Anh chị mang máy tới, em kiểm ngoại hình, pin và linh kiện ngay trước mặt anh chị, báo giá và nói rõ từng chỗ cộng trừ, trừ thẳng vào giá máy mới. Anh chị có báo giá nơi khác thì đưa em xem, em xem lại được tới đâu em nói thẳng tới đó. Có trường hợp máy anh chị đang cầm đủ giá để đổi mà không phải bù thêm, cái này tuỳ từng máy chứ không phải máy nào cũng vậy." },
-  { id:"tra-gop",
+    noi:"Dạ có ạ, Hưng Phát thu cũ đổi mới. Anh chị mang máy tới, em kiểm ngoại hình, pin và linh kiện ngay trước mặt anh chị, báo giá và nói rõ từng chỗ cộng trừ, trừ thẳng vào giá máy mới. Anh chị có báo giá nơi khác thì đưa em xem, em xem lại được tới đâu em nói thẳng tới đó. Có trường hợp máy anh chị đang cầm đủ giá để đổi mà không phải bù thêm, cái này tuỳ từng máy chứ không phải máy nào cũng vậy.",
+    hien:'Dạ có. Em kiểm ngoại hình, pin và linh kiện <b>ngay trước mặt anh/chị</b>, báo giá và nói rõ từng chỗ cộng trừ, trừ thẳng vào giá máy mới. Anh/chị có báo giá nơi khác thì đưa em xem, em xem lại được tới đâu nói thẳng tới đó.<br><br>Có trường hợp máy đang cầm đủ giá để đổi mà <b>không phải bù thêm</b> — tuỳ từng máy, không phải máy nào cũng vậy. Nhắn Zalo tên máy để em kiểm trước.'
+  },
+  {
+    id:"tra-gop", goi:"Trả góp cần giấy tờ gì?",
     kw:[["tra gop",6],["gop",5],["tra truoc",6],["cccd",5],["can cuoc",5],["giay to",5],["ho so",4],["lai suat",5],["moi thang",4]],
-    noi:"Dạ hồ sơ cơ bản là trả trước từ một triệu và căn cước công dân, từ mười tám tuổi. Em làm hồ sơ giùm anh chị ngay tại quầy, còn kết quả duyệt là do bên công ty tài chính quyết, bên em không tự duyệt được. Lãi, phí và số tiền góp mỗi tháng em báo bằng con số cụ thể trước khi anh chị ký." },
-  { id:"uu-dai",
+    noi:"Dạ hồ sơ cơ bản là trả trước từ một triệu và căn cước công dân, từ mười tám tuổi. Em làm hồ sơ giùm anh chị ngay tại quầy, còn kết quả duyệt là do bên công ty tài chính quyết, bên em không tự duyệt được. Lãi, phí và số tiền góp mỗi tháng em báo bằng con số cụ thể trước khi anh chị ký.",
+    hien:'Dạ hồ sơ cơ bản: <b>trả trước từ 1 triệu</b> và <b>CCCD, từ 18 tuổi</b>. Em làm hồ sơ giùm ngay tại quầy — <b>kết quả duyệt do công ty tài chính quyết</b>, bên em không tự duyệt được. Lãi, phí và số tiền góp mỗi tháng em báo bằng con số cụ thể trước khi anh/chị ký.'
+  },
+  {
+    id:"uu-dai", goi:"Mua máy được tặng gì?",
     kw:[["tang gi",6],["tang qua",6],["qua gi",6],["qua tang",6],["khuyen mai",6],["uu dai",6],["combo",4],["trung thu",5],["co qua khong",5],["duoc tang",6]],
-    noi:"Dạ chương trình tháng tám và Trung Thu tặng hộp bánh Trung Thu, một thùng sinh tố lúa mạch dành cho khách từ mười tám tuổi, combo quà phụ kiện, và một lượt rút lì xì cho mỗi hoá đơn. Quà và thể lệ theo từng đợt có thể thay đổi, anh chị gọi hotline để nghe chương trình đang chạy." },
-  { id:"li-xi",
+    noi:"Dạ chương trình tháng tám và Trung Thu tặng hộp bánh Trung Thu, một thùng sinh tố lúa mạch dành cho khách từ mười tám tuổi, combo quà phụ kiện, và một lượt rút lì xì cho mỗi hoá đơn. Quà và thể lệ theo từng đợt có thể thay đổi, anh chị gọi hotline để nghe chương trình đang chạy.",
+    hien:'Dạ chương trình tháng 8 – Trung Thu tặng:<ul><li>Hộp bánh Trung Thu</li><li>Một thùng sinh tố lúa mạch <i>(khách từ 18 tuổi)</i></li><li>Combo quà phụ kiện đi kèm máy</li><li>Một lượt rút lì xì cho mỗi hoá đơn</li></ul>Quà và thể lệ theo từng đợt có thể thay đổi — gọi hotline để nghe chương trình đang chạy và thể lệ áp dụng.'
+  },
+  {
+    id:"li-xi", goi:"Rút lì xì 100% trúng là sao?",
     kw:[["li xi",6],["rut li xi",6],["trung thuong",5],["100 trung",6],["co that khong",3]],
-    noi:"Dạ mỗi hoá đơn mua máy được rút một lượt theo thể lệ chương trình đang chạy, nhận tiền mặt trực tiếp tại quầy. Giá máy đã chốt trước rồi nên tiền lì xì không bị trừ vào giá máy. Mức thưởng và thể lệ thay đổi theo từng đợt, anh chị gọi hotline hỏi trước khi ghé cho chắc ạ." },
-  { id:"gia",
+    noi:"Dạ mỗi hoá đơn mua máy được rút một lượt theo thể lệ chương trình đang chạy, nhận tiền mặt trực tiếp tại quầy. Giá máy đã chốt trước rồi nên tiền lì xì không bị trừ vào giá máy. Mức thưởng và thể lệ thay đổi theo từng đợt, anh chị gọi hotline hỏi trước khi ghé cho chắc ạ.",
+    hien:'Dạ <b>mỗi hoá đơn mua máy được rút một lượt</b> theo thể lệ chương trình đang chạy, nhận tiền mặt trực tiếp tại quầy. Giá máy đã chốt trước nên tiền lì xì <b>không bị trừ vào giá máy</b>. Mức thưởng và thể lệ thay đổi theo từng đợt — gọi hotline hỏi trước khi ghé cho chắc ạ.'
+  },
+  {
+    id:"gia", goi:"Máy giá bao nhiêu?",
     kw:[["gia bao nhieu",6],["bao nhieu tien",6],["gia sao",5],["gia the nao",5],["gia may",5],["nhieu tien",5],["iphone 15",5],["muoi lam pro",5],["con hang",4],["con may khong",4],["gia",2]],
-    noi:"Dạ giá thay đổi theo tình trạng từng máy nên em không báo một con số cố định ở đây được. Anh chị gọi hotline hoặc nhắn Zalo tên máy, dung lượng và chi nhánh gần nhà, em báo giá đúng chiếc máy đang có, kèm hình và video kiểm tra để anh chị coi trước." },
-  { id:"mua-lan-dau",
+    noi:"Dạ giá thay đổi theo tình trạng từng máy nên em không báo một con số cố định ở đây được. Anh chị gọi hotline hoặc nhắn Zalo tên máy, dung lượng và chi nhánh gần nhà, em báo giá đúng chiếc máy đang có, kèm hình và video kiểm tra để anh chị coi trước.",
+    hien:'Dạ giá thay đổi theo tình trạng từng máy nên em không báo một con số cố định ở đây được — báo chung dễ làm anh/chị hiểu nhầm. Anh/chị nhắn Zalo <b>tên máy, dung lượng và chi nhánh gần nhà</b>, em gửi giá đúng chiếc máy đang có kèm hình và video kiểm tra.'
+  },
+  {
+    id:"mua-lan-dau", goi:"Đi mua cần mang theo gì?",
     kw:[["mang theo gi",6],["can gi",5],["thu tuc",5],["mua lan dau",6],["chuyen du lieu",6],["danh ba",5],["chuyen hinh",5],["mua may can",6],["cai dat",4]],
-    noi:"Dạ trả thẳng thì anh chị mang tiền, và mang máy đang xài nếu muốn thu đổi. Trả góp thì mang thêm căn cước và một triệu trả trước. Tới nơi em cho coi máy, mở video kiểm tra zin, làm giấy cam kết, rồi cài đặt, dán cường lực, chuyển danh bạ và hình từ máy cũ qua luôn cho anh chị." },
-  { id:"o-xa",
+    noi:"Dạ trả thẳng thì anh chị mang tiền, và mang máy đang xài nếu muốn thu đổi. Trả góp thì mang thêm căn cước và một triệu trả trước. Tới nơi em cho coi máy, mở video kiểm tra zin, làm giấy cam kết, rồi cài đặt, dán cường lực, chuyển danh bạ và hình từ máy cũ qua luôn cho anh chị.",
+    hien:'Dạ trả thẳng: mang tiền, mang máy đang xài nếu muốn thu đổi. Trả góp: mang thêm <b>CCCD</b> và 1 triệu trả trước.<ul><li>Em tư vấn chọn máy theo nhu cầu và tầm tiền</li><li>Mở video kiểm tra ZIN của đúng máy đó</li><li>Chốt giá, làm giấy cam kết và phiếu bảo hành</li><li>Cài đặt, dán cường lực, lắp ốp, chuyển danh bạ và hình qua máy mới</li></ul>'
+  },
+  {
+    id:"o-xa", goi:"Ở xa không tới cửa hàng được thì sao?",
     kw:[["o xa",6],["khong den duoc",6],["khong toi duoc",6],["giao hang",5],["ship",5],["tinh khac",5],["xa qua",5]],
-    noi:"Dạ anh chị nhắn Zalo cho em, em gửi hình máy thật, video kiểm tra bên trong và báo giá rõ ràng để anh chị coi ở nhà trước. Còn cách nhận máy thì em cần biết anh chị ở khu vực nào mới hướng dẫn chính xác được, anh chị nhắn giúp em khu vực đang ở." }
+    noi:"Dạ anh chị nhắn Zalo cho em, em gửi hình máy thật, video kiểm tra bên trong và báo giá rõ ràng để anh chị coi ở nhà trước. Còn cách nhận máy thì em cần biết anh chị ở khu vực nào mới hướng dẫn chính xác được, anh chị nhắn giúp em khu vực đang ở.",
+    hien:'Dạ anh/chị nhắn Zalo, em gửi <b>hình máy thật, video kiểm tra bên trong và báo giá</b> để anh/chị coi ở nhà trước. Cách nhận máy thì em cần biết anh/chị ở khu vực nào mới hướng dẫn chính xác — nhắn giúp em khu vực đang ở, máy muốn mua và tầm tiền.'
+  }
 ];
 
-const KHONG_HIEU = { id:"khong-hieu", noi:"Dạ câu này em chưa có sẵn câu trả lời. Anh chị bấm nút gọi ở dưới màn hình, số không bảy tám tám, không sáu tám, không sáu tám, có nhân viên trả lời trực tiếp cho nhanh." };
-
-/* Các câu máy tự nói khi cần báo cho khách biết chuyện gì đang xảy ra */
-const BAO = {
-  chao:        "chao-giong",
-  moTrinhDuyet:"mo-trinh-duyet",
-  khongNghe:   "khong-nghe-duoc",
-  nghiTay:     "nghi-tay"
+const KHONG_HIEU = {
+  noi:"Dạ câu này em chưa có sẵn câu trả lời. Anh chị bấm nút gọi ở dưới màn hình, số không bảy tám tám, không sáu tám, không sáu tám, có nhân viên trả lời trực tiếp cho nhanh.",
+  hien:'Dạ câu này em chưa có sẵn câu trả lời. Anh/chị bấm <b>Gọi 0788 068 068</b> ở thanh dưới màn hình, hoặc nhắn Zalo — có nhân viên trả lời trực tiếp cho nhanh.'
 };
 
-/* ================= TIỆN ÍCH ================= */
-const boDau = s => (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[đĐ]/g,"d")
-  .toLowerCase().replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
+/* ============ TIỆN ÍCH ============ */
+const boDau = s => (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[đĐ]/g,"d").toLowerCase().replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
 
 function timCauTraLoi(cauHoi){
   const q = boDau(cauHoi);
   if(!q) return null;
-  let best = null, diemCao = 0;
+  let best = null, bestScore = 0;
   for(const m of KHO){
-    let diem = 0;
-    for(const [tu, d] of m.kw) if(q.includes(tu)) diem += d;
-    if(diem > diemCao){ diemCao = diem; best = m; }
+    let score = 0;
+    for(const [tu, diem] of m.kw){ if(q.includes(tu)) score += diem; }
+    // cộng điểm nếu trùng chữ trong câu gợi ý
+    const goi = boDau(m.goi);
+    for(const w of q.split(" ")) if(w.length>3 && goi.includes(w)) score += 0.6;
+    if(score > bestScore){ bestScore = score; best = m; }
   }
-  return diemCao >= 4 ? best : null;
+  return bestScore >= 4 ? best : null;
 }
 
-/* ================= PHÁT TIẾNG ================= */
+/* ============ ĐỌC THÀNH TIẾNG ============
+   Ưu tiên file MP3 thu sẵn bằng giọng Vbee (Phan Hoa / Trang).
+   Máy nào không tải được file thì tự chuyển sang giọng có sẵn của điện thoại. */
 const loa = document.getElementById("loa");
-const nut = document.getElementById("nut");
-const GIONG = "trang";                        // giọng đọc mặc định
-let daMoKhoa = false;
+let giongChon = "trang";
+try{ giongChon = localStorage.getItem("hp_giong") || "trang"; }catch(e){}
+let voiceVi = undefined, tocDo = 1, tatTieng = false, ttsWarmed = false, daMoKhoaLoa = false;
 
-function moKhoaLoa(){                          // iPhone cần cú bấm đầu tiên mới cho phát tiếng
-  if(daMoKhoa) return;
-  daMoKhoa = true;
+function duongDanMp3(id){ return "audio/" + giongChon + "/" + id + ".mp3"; }
+
+function moKhoaLoa(){            // iPhone chỉ cho phát tiếng nếu bắt đầu từ cú bấm của người dùng
+  if(daMoKhoaLoa) return;
+  daMoKhoaLoa = true;
   try{
     loa.muted = true;
     const p = loa.play();
@@ -224,119 +417,311 @@ function moKhoaLoa(){                          // iPhone cần cú bấm đầu 
     else { loa.pause(); loa.muted = false; }
   }catch(e){ loa.muted = false; }
 }
-
-function trangThai(ten){                       // cho | nghe | doc
-  document.body.classList.remove("cho","nghe","doc");
-  document.body.classList.add(ten);
-  nut.setAttribute("aria-label",
-    ten === "nghe" ? "Đang nghe, bấm để dừng" :
-    ten === "doc"  ? "Đang trả lời" : "Bấm để nói câu hỏi");
+loa.addEventListener("play",  () => document.body.classList.add("speaking"));
+loa.addEventListener("ended", () => document.body.classList.remove("speaking"));
+loa.addEventListener("pause", () => document.body.classList.remove("speaking"));
+function layGiongViet(){
+  if(voiceVi !== undefined) return voiceVi;
+  const vs = (window.speechSynthesis ? speechSynthesis.getVoices() : []) || [];
+  const cands = vs.filter(v => (v.lang||"").toLowerCase().startsWith("vi"));
+  if(!cands.length) return null;
+  const diem = v => { let s=0; const n=(v.name||"").toLowerCase();
+    if(/neural|premium|enhanced|natural/.test(n)) s+=6;
+    if(/google/.test(n)) s+=4;
+    if(/linh|nam minh|hoai my/.test(n)) s+=3;
+    if(v.localService === false) s+=1; return s; };
+  cands.sort((a,b)=>diem(b)-diem(a));
+  voiceVi = cands[0];
+  return voiceVi;
+}
+function warmTTS(){
+  if(ttsWarmed || !("speechSynthesis" in window)) return;
+  ttsWarmed = true;
+  try{ const u = new SpeechSynthesisUtterance(" "); u.volume = 0; speechSynthesis.speak(u); }catch(e){}
+}
+function doc(text, id){
+  if(tatTieng) return;
+  ngungDoc();
+  if(id){
+    try{
+      loa.src = duongDanMp3(id);
+      loa.playbackRate = tocDo;
+      loa.onended = ngheTiep;
+      const p = loa.play();
+      if(p && p.catch) p.catch(() => docBangGiongMay(text));
+      loa.onerror = () => docBangGiongMay(text);
+      return;
+    }catch(e){ /* rơi xuống giọng máy */ }
+  }
+  docBangGiongMay(text);
 }
 
-function noi(id, xongThi){
-  ngungNoi();
-  trangThai("doc");
-  loa.src = "audio/" + GIONG + "/" + id + ".mp3";
-  loa.onended = () => { trangThai(troChuyen ? "nghe" : "cho"); if(xongThi) xongThi(); };
-  loa.onerror = () => { trangThai(troChuyen ? "nghe" : "cho"); if(xongThi) xongThi(); };
-  const p = loa.play();
-  if(p && p.catch) p.catch(() => { trangThai(troChuyen ? "nghe" : "cho"); if(xongThi) xongThi(); });
+function docBangGiongMay(text){
+  if(tatTieng || !("speechSynthesis" in window) || !text) return;
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "vi-VN";
+    const v = layGiongViet(); if(v) u.voice = v;
+    u.rate = tocDo; u.pitch = 1;
+    u.onstart = () => document.body.classList.add("speaking");
+    u.onend = u.onerror = () => { document.body.classList.remove("speaking"); ngheTiep(); };
+    speechSynthesis.speak(u);
+  }catch(e){}
 }
-function ngungNoi(){
+function ngungDoc(){
+  try{ speechSynthesis.cancel(); }catch(e){}
   try{ loa.pause(); loa.currentTime = 0; }catch(e){}
+  document.body.classList.remove("speaking");
 }
 
-/* ================= NGHE ================= */
-let rec = null, dangNghe = false, coSTT = false, troChuyen = false, soLanImLang = 0;
-const TOI_DA_IM_LANG = 3;
+/* ============ TRẢ LỜI (chỉ bằng giọng, không hiện chữ) ============ */
+function traLoi(cauHoi){
+  const m = timCauTraLoi(cauHoi);
+  const dap = m || KHONG_HIEU;
+  const id = m ? m.id : "khong-hieu";
+  doc(dap.noi, id);
+  return id;
+}
 
+/* ============ NGHE (nhận giọng nói) ============ */
+const micBtn   = document.getElementById("micBtn");
+const micLabel = document.getElementById("micLabel");
+const micHint  = document.getElementById("micHint");
+const elHeard  = document.getElementById("heard");
+const elNote   = document.getElementById("note");
+const elNoteText = document.getElementById("noteText");
+
+let rec = null, dangNghe = false, coSTT = false;
+// troChuyen = đang trong phiên nói chuyện: bấm một lần rồi hỏi liên tục,
+// bấm lần nữa mới dừng. Sau mỗi câu trả lời máy tự mở micro nghe tiếp.
+let troChuyen = false, soLanImLang = 0;
+let khoaTai = false, cauDangNghe = "", demNgungNoi = null;
+const TOI_DA_IM_LANG = 3;   // im lặng 3 lượt liên tiếp thì tự nghỉ cho đỡ hao pin
+
+function dangDoc(){
+  const mp3 = !loa.paused && !loa.ended;
+  const may = ("speechSynthesis" in window) && speechSynthesis.speaking;
+  return mp3 || may;
+}
+function ngheTiep(){          // gọi ngay sau khi máy đọc xong câu trả lời
+  if(!troChuyen){ khoaTai = false; return; }
+  micLabel.textContent = "Đang nghe…";
+  micHint.textContent = "Anh/chị cứ hỏi tiếp, khỏi bấm gì nữa.";
+  setTimeout(() => {
+    khoaTai = false;                       // mở tai lại, micro vẫn đang chạy sẵn
+    if(troChuyen && !dangNghe) batNghe();  // phòng khi trình duyệt đã tự ngắt
+  }, 150);
+}
+
+function baoLoi(html){ elNoteText.innerHTML = html; elNote.classList.add("on"); }
+// (nút phụ được gắn thêm vào elNoteText khi cần)
+function xoaBao(){ elNote.classList.remove("on"); }
+
+/* Trình duyệt bên trong app Zalo, Facebook, Messenger không cho dùng micro.
+   Khách bấm link từ Zalo là rơi vào đây, nên phải chỉ đường ra trình duyệt thật. */
 function trongAppChat(){
-  return /Zalo|FBAN|FBAV|FB_IAB|Instagram|Line\//i.test(navigator.userAgent || "");
+  const ua = navigator.userAgent || "";
+  return /Zalo|FBAN|FBAV|FB_IAB|Instagram|Line\//i.test(ua);
 }
 
-function khoiTao(){
+function baoMoTrinhDuyet(){
+  baoLoi('<b>Micro không dùng được trong Zalo</b>Anh/chị bấm dấu <b>⋯</b> ở góc trên rồi chọn <b>“Mở bằng trình duyệt”</b> (Chrome hoặc Safari) là nói được. Còn ở đây thì bấm các câu hỏi sẵn bên dưới vẫn nghe trả lời bình thường ạ.');
+  const b = document.createElement("button");
+  b.className = "note-btn"; b.type = "button"; b.textContent = "📋 Chép link để dán qua trình duyệt";
+  b.addEventListener("click", async () => {
+    try{ await navigator.clipboard.writeText(location.href); b.textContent = "Đã chép link"; }
+    catch(e){ b.textContent = location.href; }
+  });
+  elNoteText.appendChild(b);
+}
+
+function khoiTaoNghe(){
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(trongAppChat() || !SR){
-    nut.disabled = true;
-    nut.addEventListener("click", () => noi(trongAppChat() ? BAO.moTrinhDuyet : BAO.khongNghe));
-    // vẫn nói cho khách biết phải làm gì, ngay lần chạm đầu tiên vào màn hình
-    document.addEventListener("click", function moLoi(){
-      document.removeEventListener("click", moLoi);
-      moKhoaLoa();
-      noi(trongAppChat() ? BAO.moTrinhDuyet : BAO.khongNghe);
-    }, {once:true});
-    return;
+  if(trongAppChat()){
+    micBtn.disabled = true;
+    micLabel.textContent = "Bấm câu hỏi bên dưới";
+    micHint.textContent = "";
+    baoMoTrinhDuyet();
+    return false;
+  }
+  if(!SR){
+    micBtn.disabled = true;
+    micLabel.textContent = "Máy này chưa nghe được";
+    micHint.textContent = "";
+    baoLoi("<b>Trình duyệt chưa hỗ trợ nghe giọng nói</b>Anh/chị mở trang này bằng <b>Chrome</b> (Android, máy tính) hoặc <b>Safari</b> (iPhone). Trong lúc chờ, bấm các câu hỏi mẫu bên dưới vẫn nghe được câu trả lời.");
+    return false;
   }
   rec = new SR();
   rec.lang = "vi-VN";
-  rec.continuous = false;
-  rec.interimResults = false;
-  rec.maxAlternatives = 1;
+  rec.continuous = true;      // giữ micro chạy suốt phiên, khỏi hụt đầu câu
+  rec.interimResults = true;  // nghe tới đâu biết tới đó, khỏi phải chờ chốt câu
+  rec.maxAlternatives = 3;    // máy đoán 3 kiểu, kiểu nào khớp chủ đề thì lấy
 
   rec.onresult = (e) => {
-    let chot = "";
-    for(let i = e.resultIndex; i < e.results.length; i++)
-      if(e.results[i].isFinal) chot += e.results[i][0].transcript;
-    chot = chot.trim();
-    if(!chot) return;
-    soLanImLang = 0;
-    tatMic();                                   // tắt mic khi máy nói, khỏi nghe vọng tiếng loa
-    const m = timCauTraLoi(chot);
-    noi(m ? m.id : KHONG_HIEU.id, ngheTiep);    // đọc xong tự nghe câu tiếp
-  };
-
-  rec.onerror = (e) => {
-    tatMic();
-    if(e.error === "no-speech"){
-      if(troChuyen && ++soLanImLang < TOI_DA_IM_LANG){ ngheTiep(); return; }
-      troChuyen = false;
-      noi(BAO.nghiTay);
-      return;
+    if(khoaTai) return;                 // máy đang nói, bỏ qua để khỏi tự nghe tiếng loa của mình
+    let tam = "", chot = "", cacKieu = [];
+    for(let i = e.resultIndex; i < e.results.length; i++){
+      const kq = e.results[i];
+      if(kq.isFinal){
+        chot += kq[0].transcript;
+        for(let k = 0; k < kq.length; k++) cacKieu.push(kq[k].transcript);
+      }else{
+        tam += kq[0].transcript;
+      }
     }
-    troChuyen = false;
-    trangThai("cho");
-    if(e.error === "not-allowed" || e.error === "service-not-allowed")
-      noi(trongAppChat() ? BAO.moTrinhDuyet : BAO.khongNghe);
+    if(chot.trim()){ xuLyCau(chot.trim(), cacKieu); return; }
+
+    if(tam.trim()){
+      cauDangNghe = tam.trim();
+      clearTimeout(demNgungNoi);
+      // khách ngừng nói khoảng 0,7 giây là trả lời luôn, không chờ máy chốt câu
+      demNgungNoi = setTimeout(() => { if(cauDangNghe) xuLyCau(cauDangNghe, [cauDangNghe]); }, 700);
+    }
   };
-
-  rec.onend = () => { if(dangNghe){ tatMic(); if(troChuyen) ngheTiep(); } };
+  rec.onerror = (e) => {
+    dungNghe();
+    if(e.error !== "no-speech") troChuyen = false;
+    if(e.error === "not-allowed" || e.error === "service-not-allowed"){
+      if(trongAppChat()){ baoMoTrinhDuyet(); doc("", "mo-trinh-duyet"); }
+      else baoLoi("<b>Chưa được dùng micro</b>Anh/chị bấm vào biểu tượng ổ khoá trên thanh địa chỉ, chọn cho phép micro rồi tải lại trang.");
+    }else if(e.error === "no-speech"){
+      if(troChuyen && ++soLanImLang < TOI_DA_IM_LANG){
+        micHint.textContent = "Em vẫn đang nghe, anh/chị cứ hỏi ạ.";
+        ngheTiep();
+        return;
+      }
+      dungTroChuyen();
+      micHint.textContent = "Lâu quá không nghe thấy gì nên em tạm nghỉ. Bấm nút là em nghe lại ạ.";
+      doc("", "nghi-tay");
+    }else if(e.error === "network"){
+      baoLoi("<b>Mất mạng khi nghe</b>Phần nhận giọng nói cần mạng. Anh/chị kiểm tra 4G hoặc wifi rồi thử lại.");
+    }else{
+      micHint.textContent = "Nghe bị lỗi (" + e.error + "). Anh/chị thử lại nhé.";
+    }
+  };
+  rec.onend = () => {
+    dangNghe = false;
+    if(!troChuyen){ document.body.classList.remove("listening"); return; }
+    // Chrome hay tự ngắt sau ít giây im lặng — mở lại ngay để khách nói lúc nào cũng bắt được
+    setTimeout(() => { if(troChuyen && !dangNghe) batNghe(); }, 80);
+  };
   coSTT = true;
+  return true;
 }
 
-function batMic(){
-  if(!coSTT || dangNghe) return;
-  ngungNoi();
-  try{ rec.start(); }catch(e){ return; }
-  dangNghe = true;
-  trangThai("nghe");
+function xuLyCau(cau, cacKieu){
+  clearTimeout(demNgungNoi);
+  cauDangNghe = "";
+  soLanImLang = 0;
+  khoaTai = true;                       // khoá tai trong lúc máy trả lời
+  micLabel.textContent = "Đang trả lời…";
+  micHint.textContent = troChuyen ? "Trả lời xong em nghe tiếp ngay, anh/chị cứ hỏi." : "";
+
+  // máy nghe được vài kiểu, lấy kiểu nào khớp chủ đề; không kiểu nào khớp thì dùng kiểu đầu
+  let chon = null;
+  for(const kieu of (cacKieu && cacKieu.length ? cacKieu : [cau])){
+    const m = timCauTraLoi(kieu);
+    if(m){ chon = kieu; break; }
+  }
+  traLoi(chon || cau);
 }
-function tatMic(){
+
+function batNghe(){
+  if(!coSTT || dangNghe) return;
+  moKhoaLoa();
+  warmTTS();
+  ngungDoc();
+  xoaBao();
+  elHeard.textContent = "";
+  try{ rec.start(); }
+  catch(e){ return; }
+  dangNghe = true;
+  document.body.classList.add("listening");
+  micBtn.setAttribute("aria-label", "Đang nghe, bấm để dừng trò chuyện");
+  micLabel.textContent = "Đang nghe…";
+  micHint.textContent = "Anh/chị nói câu hỏi đi ạ. Nói xong ngưng một chút, khỏi bấm gì nữa.";
+}
+function dungNghe(){          // chỉ tắt micro, không kết thúc phiên trò chuyện
   dangNghe = false;
+  document.body.classList.remove("listening");
+  micBtn.setAttribute("aria-label", troChuyen ? "Bấm để dừng trò chuyện" : "Bấm để nói câu hỏi");
+  if(!troChuyen) micLabel.textContent = "Bấm để nói";
   try{ rec && rec.stop(); }catch(e){}
 }
-function ngheTiep(){
-  if(!troChuyen) return;
-  setTimeout(() => { if(troChuyen && !dangNghe) batMic(); }, 400);
-}
 
-function batDau(){
+function batDauTroChuyen(){
   if(!coSTT) return;
   troChuyen = true;
   soLanImLang = 0;
   moKhoaLoa();
-  noi(BAO.chao, () => batMic());               // chào một câu rồi nghe luôn
+  micLabel.textContent = "Đang trả lời…";
+  doc("Dạ em nghe đây, anh chị hỏi giúp em ạ.", "chao-giong");   // chào xong tự nghe (ngheTiep)
 }
-function dungHan(){
+function dungTroChuyen(){
   troChuyen = false;
-  ngungNoi();
-  tatMic();
-  trangThai("cho");
+  khoaTai = false;
+  clearTimeout(demNgungNoi);
+  ngungDoc();
+  dungNghe();
+  micLabel.textContent = "Bấm để nói";
+  micHint.textContent = "Bấm một lần rồi hỏi thoải mái, hỏi xong bấm lại để dừng.";
 }
+micBtn.addEventListener("click", () => {
+  if(!troChuyen){ batDauTroChuyen(); return; }
+  if(dangDoc()){          // đang nói dở mà khách bấm: cắt lời, nghe liền
+    ngungDoc();
+    khoaTai = false;
+    if(!dangNghe) batNghe();
+    return;
+  }
+  dungTroChuyen();
+});
 
-nut.addEventListener("click", () => { troChuyen ? dungHan() : batDau(); });
-window.addEventListener("pagehide", dungHan);
+/* ============ NÚT ĐIỀU KHIỂN ============ */
+const btnSlow = document.getElementById("btnSlow");
 
-khoiTao();
+btnSlow.addEventListener("click", () => {
+  const on = btnSlow.getAttribute("aria-pressed") === "true";
+  btnSlow.setAttribute("aria-pressed", String(!on));
+  tocDo = on ? 1 : 0.82;
+  try{ loa.playbackRate = tocDo; }catch(e){}
+  btnSlow.textContent = on ? "🐢 Tốc độ: THƯỜNG" : "🐢 Tốc độ: CHẬM";
+});
+document.getElementById("btnStop").addEventListener("click", ngungDoc);
+/* ============ CHỌN GIỌNG ============ */
+const oPick = document.getElementById("voicePick");
+function veNutGiong(){
+  oPick.querySelectorAll("button[data-giong]").forEach(b => {
+    b.setAttribute("aria-pressed", String(b.dataset.giong === giongChon));
+  });
+}
+oPick.addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-giong]");
+  if(!b) return;
+  moKhoaLoa();
+  giongChon = b.dataset.giong;
+  try{ localStorage.setItem("hp_giong", giongChon); }catch(err){}
+  veNutGiong();
+  ngungDoc();
+  doc("Dạ em nghe đây, anh chị hỏi giúp em ạ.", "chao-giong");
+});
+veNutGiong();
+
+/* ============ KHỞI ĐỘNG ============ */
+if("speechSynthesis" in window){
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = () => { voiceVi = undefined; kiemTraGiong(); };
+}
+function kiemTraGiong(){ /* giọng đọc lấy từ file MP3 thu sẵn nên không cần giọng của máy */ }
+khoiTaoNghe();
+setTimeout(kiemTraGiong, 800);
+setInterval(() => {
+  if(!("speechSynthesis" in window)) return;
+  const dangPhat = (speechSynthesis.speaking || (!loa.paused && !loa.ended)) && !dangNghe;
+  document.body.classList.toggle("speaking", dangPhat);
+}, 400);
+window.addEventListener("pagehide", ngungDoc);
 </script>
 </body>
 </html>
