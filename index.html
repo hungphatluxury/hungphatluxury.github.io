@@ -492,6 +492,18 @@ function coCum(cau, cum){
   }
   return false;
 }
+// Khách nhắc từ hai đời máy trở lên thì gần như chắc chắn đang phân vân chọn máy,
+// dù máy nghe méo tới đâu. Đếm số đời máy nhắc trong câu.
+const DOI_MAY = [["11","muoi mot"],["12","muoi hai"],["13","muoi ba"],["14","muoi bon","muoi tu"],
+                 ["15","muoi lam"],["16","muoi sau"],["x","ich"],["xs"],["xr"]];
+function demDoiMay(q){
+  let dem = 0;
+  for(const cach of DOI_MAY){
+    if(cach.some(t => q.split(" ").includes(t))) dem++;
+  }
+  return dem;
+}
+
 function timCauTraLoi(cauHoi){
   const q = boDau(String(cauHoi || "").slice(0, 400));
   if(!q) return null;
@@ -501,7 +513,10 @@ function timCauTraLoi(cauHoi){
     for(const [tu, d] of m.kw) if(coCum(q, tu)) diem += d + (tu.split(" ").length - 1) * 1.5;  // cụm càng dài càng đáng tin
     if(diem > diemCao){ diemCao = diem; best = m; }
   }
-  return diemCao >= 5.5 ? best : null;
+  if(diemCao >= 5.5) return best;
+  // chưa khớp gì nhưng khách nhắc từ hai đời máy trở lên: đưa vào bài tư vấn chọn máy
+  if(demDoiMay(q) >= 2) return KHO.find(m => m.id === "phan-van-nhieu-dong") || null;
+  return null;
 }
 
 /* ============ ĐỊA CHỈ MÁY CHỦ ============ */
