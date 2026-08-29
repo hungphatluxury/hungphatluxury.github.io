@@ -425,7 +425,7 @@ function timCauTraLoi(cauHoi){
   let best = null, diemCao = 0;
   for(const m of KHO){
     let diem = 0;
-    for(const [tu, d] of m.kw) if(coCum(q, tu)) diem += d;
+    for(const [tu, d] of m.kw) if(coCum(q, tu)) diem += d + (tu.split(" ").length - 1) * 1.5;  // cụm càng dài càng đáng tin
     if(diem > diemCao){ diemCao = diem; best = m; }
   }
   return diemCao >= 4 ? best : null;
