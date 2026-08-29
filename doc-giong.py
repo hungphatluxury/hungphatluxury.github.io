@@ -40,6 +40,7 @@ def lay_cau_tra_loi():
     ds.append(("khong-nghe-duoc", "Dạ để nói chuyện bằng giọng nói với em, anh chị mở trang này bằng Chrome hoặc Safari giúp em ạ. "
                                   "Hoặc anh chị bấm nút nhắn Zalo, nút gọi ở phía dưới màn hình, nhân viên bên em phản hồi ngay."))
     ds.append(("nghi-tay", "Dạ khi nào cần hỏi tiếp, anh chị bấm nút giữa màn hình là em nghe ngay ạ."))
+    ds.append(("cho-mot-chut", "Dạ anh chị chờ em một chút ạ."))
     return ds
 
 
