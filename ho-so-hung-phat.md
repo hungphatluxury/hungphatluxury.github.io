@@ -60,12 +60,18 @@ Khách mang máy tới, nhân viên kiểm ngoại hình, pin và linh kiện ng
 
 ## 6. Trả góp
 
-Hồ sơ cơ bản: **trả trước từ 1 triệu** và **CCCD, từ 18 tuổi**. Nhân viên làm hồ sơ giùm khách ngay tại quầy. Số tiền góp mỗi tháng tuỳ máy khách chọn và số tháng trả, nhân viên báo con số cụ thể trước khi khách ký.
+**Mức trả trước tuỳ chương trình và tuỳ dòng máy.** Tài liệu cửa hàng hiện có hai mức:
+- Chương trình **trả trước 0 đồng hoặc 500K** cho iPhone 13, 14
+- Mức phổ biến: **từ 1 triệu**
+
+TUYỆT ĐỐI không tự chọn một mức rồi khẳng định chắc chắn. Phải nói rõ là tuỳ chương trình và tuỳ máy, rồi mời khách bấm Zalo hoặc gọi để nhân viên báo đúng mức của chiếc máy khách đang nhắm.
+
+Hồ sơ cơ bản: **CCCD, từ 18 tuổi**. Nhân viên làm hồ sơ giùm khách ngay tại quầy. Số tiền góp mỗi tháng tuỳ máy khách chọn và số tháng trả, nhân viên báo con số cụ thể trước khi khách ký.
 
 ## 7. Mua máy lần đầu
 
 - Trả thẳng: mang tiền, mang máy đang dùng nếu muốn thu đổi
-- Trả góp: mang thêm CCCD và 1 triệu trả trước
+- Trả góp: mang thêm CCCD và tiền trả trước theo chương trình đang áp dụng
 
 Tại quầy: tư vấn chọn máy theo nhu cầu và tầm tiền → mở video kiểm tra ZIN của đúng máy đó → chốt giá, làm giấy cam kết và phiếu bảo hành → cài đặt, dán cường lực, lắp ốp, chuyển danh bạ và hình từ máy đang dùng sang máy mới.
 
