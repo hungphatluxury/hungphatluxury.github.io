@@ -91,7 +91,7 @@
   #micBtn:disabled{background:var(--surface-2);color:var(--ink-faint);box-shadow:none;cursor:not-allowed}
 
   .mic-label{font-weight:600;font-size:17px;text-align:center;min-height:26px}
-  .mic-hint{font-size:14px;color:var(--ink-faint);text-align:center;max-width:34ch;min-height:20px}
+  .mic-hint{font-size:16px;color:var(--ink-soft);text-align:center;max-width:34ch;min-height:20px}
   .heard{
     font-size:16px;color:var(--ink-soft);text-align:center;font-style:italic;
     min-height:24px;max-width:38ch;
@@ -229,6 +229,10 @@
         </button>
       </div>
       <div class="mic-label" id="micLabel">Bấm để nói</div>
+      <div class="controls" id="nutPhu" style="display:none">
+        <button class="mini" id="btnNgheLai" type="button">🔁 Nghe lại câu vừa rồi</button>
+        <button class="mini" id="btnDung" type="button">⏹ Dừng</button>
+      </div>
       <div class="heard" id="heard"></div>
       <div class="mic-hint" id="micHint">Bấm một lần rồi hỏi thoải mái — trả lời xong em tự mở micro nghe câu tiếp. Bấm lại để dừng.</div>
       <div class="note" id="note"><span>⚠️</span><div id="noteText"></div></div>
@@ -267,7 +271,7 @@ const KHO = [
   {
     id:"hai-noi-lo", goi:"Mua iPhone 99% sợ nhất điều gì?",
     kw:[["so nhat",6],["lo nhat",6],["can luu y gi",6],["mua may can chu y",6],["kinh nghiem mua",6],["nen hoi gi",5],["mua iphone 99",6],["hai dieu",5],["can kiem tra gi",6]],
-    noi:"Dạ mua i phôn chín mươi chín phần trăm, khách sợ nhất hai điều. Một là máy có còn zin thật không. Hai là mất tem thì còn được bảo hành không. Zin mà không có video chứng minh thì vẫn chỉ là lời nói, nên bên em quay video kiểm tra bên trong cho một trăm phần trăm máy, không đợi khách yêu cầu. Còn bảo hành mà phụ thuộc vào tem ngoài thì người chịu rủi ro chính là khách hàng, nên bên em bỏ hẳn điều kiện tem, tem bong rách hay mất thì quyền lợi của anh chị vẫn còn nguyên.",
+    noi:"Dạ mua i phôn chín mươi chín phần trăm, khách sợ nhất hai điều: máy có còn zin thật không, và mất tem thì còn được bảo hành không. Bên em gỡ cả hai: một trăm phần trăm máy có video kiểm tra bên trong, và bảo hành không cần tem ngoài, tem bong rách hay mất thì quyền lợi vẫn còn nguyên ạ.",
     hien:''
   },
   {
@@ -277,9 +281,21 @@ const KHO = [
     hien:''
   },
   {
+    id:"nam-cam-ket-day-du", goi:"Nghe đầy đủ 5 cam kết",
+    kw:[["nghe tiep",8],["noi tiep",8],["day du",6],["chi tiet",6],["ke het",6],["tung cam ket",8],["nam cam ket day du",9]],
+    noi:"Dạ em xin nói đầy đủ năm cam kết ạ. Cam kết một, một trăm phần trăm máy có video kiểm tra zin bên trong, quay chính chiếc máy anh chị chọn, không đợi khách yêu cầu hay bắt buộc xem. Cam kết hai, cam kết bằng văn bản, không zin hoàn tiền và tặng luôn máy. Cam kết ba, bảo hành một đổi một trong mười hai tháng, bao gồm cả nguồn, màn hình, main và phây ai đi, không tốn phí. Máy lỗi là đổi cây máy zin khác, không qua sửa chữa thay thế, không làm mất giá trị máy. Cam kết bốn, bảo hành không cần tem ngoài, không tốn phí, đầu tiên và duy nhất tại Kiên Giang. Cam kết năm, bảo hành trọn đời pin, ốp lưng, cường lực, không tốn phí, không giới hạn số lần, không cần mua thêm gói bảo hành.",
+    hien:''
+  },
+  {
+    id:"moi-hoi-lai", goi:"",
+    kw:[],
+    noi:"Dạ em nghe đây ạ. Anh chị cứ hỏi thoải mái, ví dụ bảo hành thế nào, có trả góp không, hay thu cũ đổi mới ra sao ạ.",
+    hien:''
+  },
+  {
     id:"an-tam", goi:"Mua ở đây có rủi ro gì không?",
     kw:[["nam cam ket",6],["5 cam ket",6],["cam ket gi",6],["minh bach",5],["co rui ro",6],["rui ro",5],["an tam",6],["co lo gi khong",6],["so mua nham",6],["lo bi lua",6],["may loi thi sao",6],["co dam bao",5],["tin duoc khong",5],["yen tam",5]],
-    noi:"Dạ mua i phôn tại Hưng Phát an tâm tuyệt đối, không lo rủi ro, vì mọi quyền lợi đều công khai rõ ràng, minh bạch và dễ hiểu, không dùng câu chữ mập mờ hay điều khoản gây bất lợi cho khách. Năm cam kết như sau. Một, một trăm phần trăm máy có video kiểm tra zin bên trong, không đợi khách yêu cầu hay bắt buộc xem. Hai, cam kết bằng văn bản, không zin hoàn tiền và tặng luôn máy. Ba, bảo hành một đổi một trong mười hai tháng, bao gồm cả nguồn, màn hình, main và phây ai đi. Máy lỗi là đổi cây máy zin khác, không qua sửa chữa thay thế, không làm mất giá trị máy. Bốn, bảo hành không cần tem ngoài, không tốn phí, đầu tiên và duy nhất tại Kiên Giang. Năm, bảo hành trọn đời pin, ốp lưng, cường lực, không giới hạn số lần.",
+    noi:"Dạ mua i phôn tại Hưng Phát an tâm tuyệt đối, không lo rủi ro, vì mọi quyền lợi đều công khai rõ ràng, minh bạch và dễ hiểu, không dùng câu chữ mập mờ hay điều khoản gây bất lợi cho khách. Bên em có năm cam kết: video kiểm tra zin, cam kết bằng văn bản, bảo hành một đổi một mười hai tháng, bảo hành không cần tem ngoài, và bảo hành trọn đời pin ốp lưng cường lực. Anh chị muốn nghe đầy đủ từng cam kết thì nói nghe tiếp giúp em ạ.",
     hien:''
   },
   {
@@ -297,7 +313,7 @@ const KHO = [
   {
     id:"video-zin", goi:"Làm sao biết máy còn ZIN?",
     kw:[["lam sao biet may zin",6],["that su zin",6],["kiem chung",6],["sao biet zin that",6],["chung minh",5],["moi may deu co",6],["tat ca may",6],["100 may",6],["may nao cung co",6],["lam sao biet",5],["video kiem tra",6],["coi video",5],["bang chung",4],["kiem tra ben trong",6],["mo may",3],["sao biet may zin",6]],
-    noi:"Dạ một trăm phần trăm máy bán ra đều có video kiểm tra zin bên trong, chứ không phải chỉ vài máy đẹp mới có. Video là quay chính chiếc máy anh chị chọn, không phải máy nào khác. Khách không cần nhắc hay yêu cầu, bên em mở cho xem trước khi bàn giao. Zin mà không có video chứng minh thì vẫn chỉ là lời nói thôi ạ. Em gửi luôn video qua Zalo để anh chị giữ, sau này bán lại máy đưa ra là người mua tin liền.",
+    noi:"Dạ một trăm phần trăm máy bán ra đều có video kiểm tra zin bên trong, quay chính chiếc máy anh chị chọn, không đợi khách yêu cầu hay bắt buộc xem. Zin mà không có video chứng minh thì vẫn chỉ là lời nói thôi ạ. Em mở cho anh chị coi tại quầy và gửi qua Zalo để anh chị giữ.",
     hien:'Dạ đừng tin lời nói — anh/chị coi <b>video kiểm tra bên trong của đúng chiếc máy mình mua</b>. Mỗi chiếc iPhone đã qua sử dụng bên em bán ra đều được quay video trước khi bàn giao, mở cho anh/chị coi tại quầy và gửi qua Zalo để anh/chị giữ. Sau này bán lại máy, đưa video đó ra thì người mua tin liền.'
   },
   {
@@ -309,13 +325,13 @@ const KHO = [
   {
     id:"bao-hanh", goi:"Mua máy được bảo hành những gì?",
     kw:[["bao hanh gi",6],["che do bao hanh",6],["bao hanh",4],["doi 1",5],["mot doi mot",5],["1 doi 1",5],["12 thang",5],["muoi hai thang",5],["bao lau",3],["bao hanh sao",6],["bao hanh the nao",6]],
-    noi:"Dạ bên em có năm cam kết. Một, một trăm phần trăm máy có video kiểm tra zin bên trong, không đợi khách yêu cầu hay bắt buộc xem. Hai, cam kết bằng văn bản, không zin hoàn tiền và tặng luôn máy. Ba, bảo hành một đổi một trong mười hai tháng, bao gồm cả nguồn, màn hình, main và phây ai đi. Máy lỗi là bên em đổi cây máy zin khác, không qua sửa chữa thay thế, không làm mất giá trị máy. Bốn, bảo hành không cần tem ngoài, không tốn phí, đầu tiên và duy nhất tại Kiên Giang. Năm, bảo hành trọn đời pin, ốp lưng, cường lực, không giới hạn số lần, không tốn phí, không cần mua thêm gói bảo hành.",
+    noi:"Dạ bảo hành gồm hai phần. Một là bảo hành một đổi một trong mười hai tháng, bao gồm cả nguồn, màn hình, main và phây ai đi, không tốn phí. Máy lỗi là bên em đổi cây máy zin khác, không qua sửa chữa thay thế, không làm mất giá trị máy. Hai là bảo hành trọn đời pin, ốp lưng, cường lực, không tốn phí, không giới hạn số lần, không cần mua thêm gói bảo hành. Cả hai đều không cần tem ngoài ạ.",
     hien:'Dạ chính sách gồm hai phần:<ul><li><b>1 đổi 1 trong 12 tháng</b> cho nguồn, màn hình, main, Face ID — đổi máy <b>cùng dòng, cùng dung lượng, tình trạng tương đương</b>.</li><li><b>Trọn đời</b> pin, ốp lưng, cường lực.</li></ul>Không tốn phí, không cần tem ngoài. Áp dụng cho lỗi phát sinh từ máy; không áp dụng khi máy rơi vỡ, vào nước hoặc đã tháo mở ở nơi khác.'
   },
   {
     id:"tem", goi:"Rách tem có mất bảo hành không?",
     kw:[["tem",6],["rach tem",6],["mat tem",6],["tem ngoai",6],["con tem",4]],
-    noi:"Dạ không ạ, bên em bảo hành không cần tem ngoài, không tốn phí, đầu tiên và duy nhất tại Kiên Giang. Tem bong, tem rách hay mất tem thì quyền lợi của anh chị vẫn còn nguyên. Nơi nào bắt giữ tem thì cửa hàng được bảo vệ, còn rủi ro thuộc về khách: chỉ cần cái tem bong ra là toàn bộ quyền lợi bảo hành có thể mất theo, hàng triệu đồng chi phí cuối cùng khách tự gánh. Bên em bỏ hẳn điều kiện đó, anh chị không cần giữ tem vẫn giữ nguyên quyền lợi.",
+    noi:"Dạ không ạ. Bên em bảo hành không cần tem ngoài, không tốn phí, đầu tiên và duy nhất tại Kiên Giang. Tem bong, tem rách hay mất tem thì quyền lợi của anh chị vẫn còn nguyên. Máy chín mươi chín phần trăm bên em cũng không dán tem ngoài, không lo mất thẩm mỹ máy ạ.",
     hien:'Dạ <b>không</b>. Bên em bảo hành <b>không cần tem ngoài</b> — tem rách, bong hay mất thì quyền lợi vẫn còn nguyên. Tem ngoài không chứng minh được máy còn ZIN; cái chứng minh được là video kiểm tra bên trong.'
   },
   {
@@ -445,6 +461,17 @@ const elNote = document.getElementById("note");
 const elNoteText = document.getElementById("noteText");
 
 let daMoKhoa = false, dangDoc = false;
+let lanCuoiPhat = null, demImLang = null;
+const IM_LANG_TU_NGHI = 30000;        // im lặng 30 giây thì máy tự nghỉ cho đỡ hao pin và 4G
+
+function hetGioImLang(){
+  clearTimeout(demImLang);
+  if(!dangTroChuyen) return;
+  demImLang = setTimeout(() => {
+    if(!dangTroChuyen || dangDoc) return;
+    phat("audio/" + GIONG + "/nghi-tay.mp3", () => dungTroChuyen());
+  }, IM_LANG_TU_NGHI);
+}
 
 function moKhoaLoa(){                 // iPhone cần cú bấm đầu tiên mới cho phát tiếng
   if(daMoKhoa) return;
@@ -463,8 +490,10 @@ function phat(duongDan, xongThi){
   document.body.classList.add("speaking");
   micLabel.textContent = "Đang trả lời…";
   guiLenh("im");                      // trong lúc máy nói thì đừng nghe tiếng loa của chính mình
-  setTimeout(() => { if(dangDoc) guiLenh("nghe"); }, 1200);   // sau đó nghe lại, khách chen ngang được
+  setTimeout(() => { if(dangDoc) guiLenh("nghe"); }, 2500);   // sau đó nghe lại, khách chen ngang được
   loa.src = duongDan;
+  lanCuoiPhat = duongDan;
+  document.getElementById("nutPhu").style.display = "flex";
   loa.onended = loa.onerror = () => { xongPhat(); if(xongThi) xongThi(); };
   const p = loa.play();
   if(p && p.catch) p.catch(() => { xongPhat(); if(xongThi) xongThi(); });
@@ -473,9 +502,11 @@ function xongPhat(){
   dangDoc = false;
   document.body.classList.remove("speaking");
   if(dangTroChuyen){
+    document.body.classList.add("listening");     // giữ nút đỏ: khách phải thấy máy đang nghe
     micLabel.textContent = "Đang nghe…";
     micHint.textContent = "Anh/chị cứ hỏi tiếp, khỏi bấm gì nữa.";
     guiLenh("nghe");
+    hetGioImLang();
   }
 }
 function ngungPhat(){
@@ -487,8 +518,15 @@ function doc(id){ phat("audio/" + GIONG + "/" + id + ".mp3"); }
 
 /* ============ TRẢ LỜI ============ */
 function traLoi(cauHoi){
+  const q = boDau(cauHoi);
+  if(lanCuoiPhat && (coCum(q,"nghe lai") || coCum(q,"noi lai") || coCum(q,"nhac lai") || q === "sao")){
+    phat(lanCuoiPhat); return;
+  }
   const m = timCauTraLoi(cauHoi);
-  if(m){ doc(m.id); return; }         // có sẵn: phát ngay, giọng thu sẵn, đúng từng chữ
+  if(m){ doc(m.id); return; }
+  if(q.split(" ").filter(Boolean).length <= 3){     // "em ơi", "alo" — mời hỏi rõ hơn, khỏi tốn lượt
+    doc("moi-hoi-lai"); return;
+  }         // có sẵn: phát ngay, giọng thu sẵn, đúng từng chữ
   hoiBoTraLoi(cauHoi);                // câu lạ: nhờ bộ trả lời của cửa hàng
 }
 
@@ -497,20 +535,24 @@ async function hoiBoTraLoi(cauHoi){
   guiLenh("im");
   micLabel.textContent = "Đang trả lời…";
   document.body.classList.add("speaking");
-  const dem = new Audio("audio/" + GIONG + "/cho-mot-chut.mp3");
-  dem.play().catch(() => {});
+  loa.src = "audio/" + GIONG + "/cho-mot-chut.mp3";
+  loa.loop = true;                       // lặp câu chờ, không để khách nghe im lặng
+  loa.onended = null;
+  loa.play().catch(() => {});
   try{
+    const hen = new AbortController();
+    setTimeout(() => hen.abort(), 12000);      // quá 12 giây thì thôi, đừng bắt khách chờ
     const tra = await fetch(MAY_TRA_LOI, {
       method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({cau: cauHoi})
+      body: JSON.stringify({cau: cauHoi}), signal: hen.signal
     });
     const kq = await tra.json();
-    try{ dem.pause(); }catch(e){}
+    loa.loop = false;
     if(kq.tieng){ phat(MAY_TRA_LOI + "/" + kq.tieng); return; }
     doc("khong-hieu");
   }catch(e){
-    try{ dem.pause(); }catch(err){}
-    doc("khong-hieu");                // máy chủ trục trặc thì dùng câu dự phòng thu sẵn
+    loa.loop = false;
+    doc("khong-hieu");                // quá lâu hoặc máy chủ trục trặc: dùng câu dự phòng
   }
 }
 
@@ -585,14 +627,19 @@ async function batDauNghe(){
       return;
     }
     if(tin.bat_dau_noi){
+      clearTimeout(demImLang);
       lanCuoiNoi = Date.now();
       if(dangDoc){ ngungPhat(); micLabel.textContent = "Đang nghe…"; }   // khách chen ngang: máy im
       document.body.classList.add("listening");
       return;
     }
     if(tin.cau){
-      document.body.classList.remove("listening");
+      elHeard.textContent = "“" + tin.cau + "”";   // cho khách thấy máy nghe ra gì
       traLoi(tin.cau);
+      return;
+    }
+    if(tin.trong && dangTroChuyen){
+      micHint.textContent = "Em nghe chưa rõ, anh/chị nói lại giúp em ạ.";
       return;
     }
   };
@@ -602,6 +649,12 @@ async function batDauNghe(){
     if(dangTroChuyen) setTimeout(() => { if(dangTroChuyen) batDauNghe(); }, 800);  // rớt mạng thì nối lại
   };
   ws.onerror = () => {};
+
+  await new Promise((xong) => {              // đợi nối xong hẳn, kẻo câu đầu bị rớt
+    if(ws.readyState === 1) return xong();
+    ws.addEventListener("open", () => xong(), {once:true});
+    setTimeout(xong, 4000);
+  });
 
   if(!ctx){
     ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -645,6 +698,8 @@ async function batDauTroChuyen(){
 
 function dungTroChuyen(){
   dangTroChuyen = false;
+  clearTimeout(demImLang);
+  document.getElementById("nutPhu").style.display = "none";
   ngungPhat();
   document.body.classList.remove("listening");
   micLabel.textContent = "Bấm để nói";
@@ -652,6 +707,11 @@ function dungTroChuyen(){
   try{ if(ws) ws.close(); }catch(e){}
   ws = null;
 }
+
+document.getElementById("btnNgheLai").addEventListener("click", () => {
+  if(lanCuoiPhat) phat(lanCuoiPhat);
+});
+document.getElementById("btnDung").addEventListener("click", () => dungTroChuyen());
 
 micBtn.addEventListener("click", () => {
   if(!dangTroChuyen){ batDauTroChuyen(); return; }
@@ -692,7 +752,8 @@ function veDanhSachCauHoi(){
   nhan.textContent = "Bấm câu hỏi để nghe trả lời";
   const hop = document.createElement("div");
   hop.className = "asks";
-  KHO.forEach(m => {
+  const HAY_HOI = ["bao-hanh","gia","tra-gop","thu-cu","chi-nhanh","uu-dai","video-zin","tem"];
+  KHO.filter(m => HAY_HOI.includes(m.id)).forEach(m => {
     const b = document.createElement("button");
     b.className = "ask"; b.type = "button";
     b.textContent = m.goi || m.id;
@@ -704,6 +765,7 @@ function veDanhSachCauHoi(){
 }
 
 /* ============ KHỞI ĐỘNG ============ */
+veDanhSachCauHoi();          // luôn hiện sẵn: khách phải biết được phép hỏi gì
 if(trongAppChat()){
   micBtn.disabled = true;
   micLabel.textContent = "Bấm câu hỏi bên dưới";
