@@ -24,13 +24,21 @@ def lay_cau_tra_loi():
     """Rút (id, lời đọc) từ index.html."""
     html = open(os.path.join(GOC, "index.html"), encoding="utf-8").read()
     ds = []
-    for khoi in re.finditer(r'id:"([a-z0-9-]+)",.*?noi:"(.*?)",\n', html, re.S):
+    for khoi in re.finditer(r'id:"([a-z0-9-]+)",\s*\n\s*kw:\[.*?\],\s*\n\s*noi:"(.*?)"\s*\}', html, re.S):
         ds.append((khoi.group(1), khoi.group(2)))
     kh = re.search(r'KHONG_HIEU = \{\s*\n\s*noi:"(.*?)",', html, re.S)
     if kh:
         ds.append(("khong-hieu", kh.group(1)))
-    # câu chào phát khi khách bấm đổi giọng
-    ds.append(("chao-giong", "Dạ em nghe đây, anh chị bấm nút micro rồi hỏi giúp em ạ."))
+    # các câu máy tự nói để báo cho khách, thay cho chữ trên màn hình
+    ds.append(("chao-giong", "Dạ em nghe đây, anh chị hỏi giúp em ạ."))
+    ds.append(("mo-trinh-duyet", "Dạ anh chị đang mở bằng ứng dụng Zalo nên micro không dùng được. "
+                                 "Anh chị bấm dấu ba chấm ở góc trên bên phải, rồi chọn mở bằng trình duyệt, "
+                                 "là nói chuyện với em được ngay ạ."))
+    ds.append(("khong-nghe-duoc", "Dạ trình duyệt này chưa nghe được giọng nói. "
+                                  "Anh chị mở trang này bằng Chrome hoặc Safari giúp em, hoặc bấm nút gọi ở phía dưới, "
+                                  "có nhân viên nói chuyện trực tiếp với anh chị ạ."))
+    ds.append(("nghi-tay", "Dạ lâu quá em không nghe thấy gì nên em tạm nghỉ. "
+                           "Khi nào cần, anh chị bấm nút giữa màn hình là em nghe lại ngay ạ."))
     return ds
 
 
