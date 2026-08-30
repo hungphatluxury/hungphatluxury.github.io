@@ -577,13 +577,13 @@ const KHO = [
   },
   {
     id:"phan-van-dung-luong", goi:"Đời thấp dung lượng cao hay đời cao dung lượng thấp",
-    kw:[["dung luong",7],["bo nho",6],["256",6],["512",6],["128 hay 256",9],["doi thap dung luong cao",9],["doi cao dung luong thap",9],["may doi cu dung luong",8]],
+    kw:[["dung luong",7],["bo nho",6],["256",6],["512",6],["128 hay 256",9],["doi thap dung luong cao",9],["doi cao dung luong thap",9],["may doi cu dung luong",8,["nen lay dung luong bao nhieu",12],["dung luong bao nhieu",11],["lay dung luong nao",11],["bao nhieu gb",10],["128 hay 256",11],["may bo nho bao nhieu",10]]],
     noi:"Dạ trường hợp này mình phải xem nhu cầu lưu trữ của anh chị trước ạ. Nếu mình chụp hình, quay video, lưu dữ liệu nhiều thì dung lượng là yếu tố rất quan trọng. Còn nếu nhu cầu lưu trữ không nhiều mà anh chị muốn ưu tiên đời máy cao hơn thì mình có thể chuyển ngân sách sang đời cao. Em không muốn chỉ nhìn đời máy rồi tư vấn, vì mua về mà dung lượng không đủ dùng thì trải nghiệm của anh chị cũng không tốt. Anh chị cho em biết mình thường dùng khoảng bao nhiêu dung lượng, em giúp mình cân phương án hợp lý nhất ạ.",
     hien:''
   },
   {
     id:"phan-van-nhieu-dong", goi:"Phân vân nhiều dòng, chưa biết chọn máy nào",
-    kw:[["tu van dong nao",9],["tu van dong may nao",9],["so sanh",8],["khac gi nhau",8],["nen chon cai nao",8],["may nao tot hon",8],["may nao hop",8],["muoi lam voi muoi sau",8],["muoi hai voi muoi ba",8],["15 va 16",8],["12 va 13",8],["tu van giup anh",8],["tu van cho anh",8],["giua iphone",7],["chua biet chon",9],["chon may nao",8],["nen mua may nao",8],["nhieu dong qua",9],["dong nao hop",8],["tu van giup em chon",8],["phan van qua",8],["roi qua khong biet",8]],
+    kw:[["tu van dong nao",9],["tu van dong may nao",9],["so sanh",8],["khac gi nhau",8],["nen chon cai nao",8],["may nao tot hon",8],["may nao hop",8],["muoi lam voi muoi sau",8],["muoi hai voi muoi ba",8],["15 va 16",8],["12 va 13",8],["tu van giup anh",8],["tu van cho anh",8],["giua iphone",7],["chua biet chon",9],["chon may nao",8],["nen mua may nao",8],["nhieu dong qua",9],["dong nao hop",8],["tu van giup em chon",8],["phan van qua",8],["roi qua khong biet",8],["can tu van iphone",10],["can tu van",9],["tu van iphone",10],["tu van may",9],["tu van giup",9],["mua dong nao",10],["mua may dong nao",12],["nen mua dong nao",12],["dong nao",7],["lay may nao",9],["may nao gio",8],["mua iphone nao",10],["chon dum",8],["chon giup",8],["goi y giup",8],["khong biet mua gi",9],["muon mua iphone",8],["dinh mua iphone",8],["mua may moi",6]],
     noi:"Dạ anh chị đang cân nhiều dòng thì mình đừng chọn vội ạ. Em giúp mình lọc cho nhanh. Anh chị cho em ba thông tin: ngân sách mình muốn chi khoảng bao nhiêu; mình ưu tiên điều gì nhất khi mua máy; và mình dự kiến dùng chiếc này khoảng bao lâu. Có ba thông tin đó em sẽ lọc xuống còn một tới hai dòng phù hợp nhất cho anh chị, tránh trường hợp mình mua dư nhu cầu hoặc tiết kiệm quá rồi sau này lại thấy thiếu. Sau khi chọn được dòng phù hợp, em sẽ tư vấn tiếp tình trạng máy và toàn bộ quyền lợi bảo hành của Hưng Phát Luxury để anh chị cân nhắc đầy đủ rồi mới quyết định ạ.",
     hien:''
   },
@@ -770,8 +770,10 @@ function coCum(cau, cum){
   const tuCau = cau.split(" "), tuCum = cum.split(" ");
   if(tuCum.length > tuCau.length) return false;
   if(/[0-9]/.test(cum)) return false;          // cụm có con số thì phải khớp đúng, "2 tháng 9" không được thành "12 tháng"
-  if(cum.length < 8) return false;
-  const nguong = Math.min(2, Math.floor(cum.length * 0.2));
+  // Cụm ngắn dễ đụng nhau khi khớp mờ ("máy dựng" từng bị nhận thành "lấy dung"),
+  // nên chỉ cho khớp mờ với cụm đủ dài.
+  if(cum.length < 12) return false;
+  const nguong = Math.min(2, Math.floor(cum.length * 0.15));
   if(nguong < 1) return false;
   for(let i = 0; i + tuCum.length <= tuCau.length; i++){
     const doan = tuCau.slice(i, i + tuCum.length).join(" ");
@@ -1175,7 +1177,7 @@ function baoMoTrinhDuyet(){
 // bên phải là quyền lợi và thủ tục sau khi đã chọn máy.
 const COT_CAU_HOI = [
   [ ["Quyền lợi & bảo hành", [
-      ["bay-ly-do",      "Vì sao nên mua máy tại Hưng Phát?"],
+      ["bay-ly-do",      "7 lý do nên mua máy tại Hưng Phát"],
       ["video-zin",      "Làm sao biết máy còn ZIN?"],
       ["doi-1-doi-1",    "Bảo hành 1 đổi 1 trong 12 tháng là như thế nào?"],
       ["tem",            "Bảo hành tốt nhất Kiên Giang là sao?"],
