@@ -373,7 +373,7 @@
 <!-- Phần hỏi đáp không hiển thị chữ: khách nói, máy trả lời bằng giọng -->
 <div class="song-doc" id="songDoc" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 
-<audio id="loa" preload="none"></audio>
+<audio id="loa" preload="none" playsinline webkit-playsinline></audio>
 
 <nav class="dock" aria-label="Liên hệ nhanh">
   <div class="dock-in">
@@ -860,7 +860,7 @@ function moKhoaLoa(){                 // iPhone cần cú bấm đầu tiên m�
   }catch(e){ loa.muted = false; }
 }
 
-function phat(duongDan, xongThi){
+function phat(duongDan, xongThi, khiLoi){
   ngungPhat();
   dangDoc = true;
   document.body.classList.add("speaking");
@@ -870,9 +870,10 @@ function phat(duongDan, xongThi){
   loa.src = duongDan;
   lanCuoiPhat = duongDan;
   document.getElementById("nutPhu").style.display = dangTroChuyen ? "flex" : "none";
-  loa.onended = loa.onerror = () => { xongPhat(); if(xongThi) xongThi(); };
+  loa.onended = () => { xongPhat(); if(xongThi) xongThi(); };
+  loa.onerror = () => { xongPhat(); if(khiLoi) khiLoi(); else if(xongThi) xongThi(); };
   const p = loa.play();
-  if(p && p.catch) p.catch(() => { xongPhat(); if(xongThi) xongThi(); });
+  if(p && p.catch) p.catch(() => { xongPhat(); if(khiLoi) khiLoi(); else if(xongThi) xongThi(); });
 }
 function xongPhat(){
   dangDoc = false;
@@ -895,14 +896,14 @@ function ngungPhat(){
   document.body.classList.remove("speaking");
 }
 function doc(id){
-  // Nếu chưa có file giọng cho chủ đề này (chưa thu kịp) thì đừng để khách nghe im lặng:
-  // hỏi bộ trả lời của cửa hàng, không được thì phát câu dự phòng.
+  // Phát thẳng ngay trong cú bấm của khách. Trình duyệt bên trong Zalo chặn tiếng
+  // nếu lệnh phát nằm sau một lệnh chờ mạng, nên tuyệt đối không kiểm tra file trước.
+  // Thiếu file thì thẻ audio báo lỗi, lúc đó mới hỏi bộ trả lời của cửa hàng.
   const duong = "audio/" + GIONG + "/" + id + ".mp3";
-  fetch(duong, {method:"HEAD"}).then(r => {
-    if(r.ok){ phat(duong); return; }
+  phat(duong, null, () => {
     const m = KHO.find(x => x.id === id);
     if(m) hoiBoTraLoi(m.goi || id); else phat("audio/" + GIONG + "/khong-hieu.mp3");
-  }).catch(() => phat(duong));
+  });
 }
 
 /* ============ TRẢ LỜI ============ */
@@ -1152,7 +1153,7 @@ document.addEventListener("visibilitychange", () => {   // rời trang thì nh�
 
 /* ============ MỞ TRONG ZALO: MICRO BỊ CHẶN ============ */
 function baoMoTrinhDuyet(){
-  baoLoi('<b>Micro không dùng được trong Zalo</b>Anh/chị bấm dấu <b>⋯</b> ở góc trên rồi chọn <b>“Mở bằng trình duyệt”</b> (Chrome hoặc Safari) là nói được. Còn ở đây thì bấm các câu hỏi sẵn bên dưới vẫn nghe trả lời bình thường ạ.');
+  baoLoi('<b>Đang mở trong Zalo nên chưa nói được</b>Anh/chị kéo xuống <b>bấm vào câu hỏi</b> là nghe trả lời ngay. Muốn <b>hỏi bằng giọng nói</b> thì bấm dấu <b>⋯</b> ở góc trên rồi chọn <b>“Mở bằng trình duyệt”</b>.');
   const android = /Android/i.test(navigator.userAgent || "");
   if(android){
     const mo = document.createElement("a");
@@ -1221,7 +1222,7 @@ function veDanhSachCauHoi(){
         const b = document.createElement("button");
         b.className = "ask"; b.type = "button";
         b.textContent = chu;
-        b.addEventListener("click", () => { moKhoaLoa(); doc(id); });
+        b.addEventListener("click", () => { daMoKhoa = true; doc(id); });
         cot.appendChild(b);
       });
     });
@@ -1235,7 +1236,7 @@ function veDanhSachCauHoi(){
 veDanhSachCauHoi();          // luôn hiện sẵn: khách phải biết được phép hỏi gì
 if(trongAppChat()){
   micBtn.disabled = true;
-  micLabel.textContent = "Bấm câu hỏi bên dưới";
+  micLabel.textContent = "Bấm câu hỏi bên dưới để nghe";
   micHint.textContent = "";
   baoMoTrinhDuyet();
 }
