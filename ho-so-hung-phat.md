@@ -3,6 +3,8 @@
 > Đây là toàn bộ thông tin máy được phép dùng để trả lời khách.
 > Không có trong file này thì KHÔNG được tự nghĩ ra, phải mời khách nhắn Zalo hoặc gọi hotline.
 > Sửa file này xong nhớ chạy: `python3 dua-ho-so-len-vps.py`
+>
+> **Cách đọc:** chữ iPhone luôn đọc là **"ai phôn"** (theo tiếng Anh), không đọc là "i phôn".
 
 ## 1. Cửa hàng
 
