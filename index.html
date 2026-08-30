@@ -916,8 +916,10 @@ function timCauTraLoi(cauHoi){
     if(!hoiGia){
       if(soDoi >= 2 || hoiSoSanh){
         // có bài riêng cho vài cặp hay gặp, còn lại vào bài lọc chung
-        if(coCum(q,"13") && coCum(q,"14")){ const r = KHO.find(m=>m.id==="phan-van-13-14"); if(r) return r; }
-        if(coCum(q,"14") && coCum(q,"15")){ const r = KHO.find(m=>m.id==="phan-van-14-15"); if(r) return r; }
+        // máy nghe số thành chữ nên phải dò cả hai dạng: "13" và "mười ba"
+        const coDoi = (so) => (DOI_MAY.find(c => c[0] === so) || [so]).some(t => coTronVen(q, t));
+        if(coDoi("13") && coDoi("14")){ const r = KHO.find(m=>m.id==="phan-van-13-14"); if(r) return r; }
+        if(coDoi("14") && coDoi("15")){ const r = KHO.find(m=>m.id==="phan-van-14-15"); if(r) return r; }
         const r = KHO.find(m=>m.id==="phan-van-nhieu-dong"); if(r) return r;
       }
       // khách chỉ nêu một dòng mà lại rơi vào bài so sánh cặp thì lệch ý,
