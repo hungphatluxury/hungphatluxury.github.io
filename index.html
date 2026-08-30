@@ -672,6 +672,12 @@ const KHO = [
     hien:''
   },
   {
+    id:"tu-van-theo-dong", goi:"Tư vấn theo dòng máy khách đang nhắm",
+    kw:[],
+    noi:"Dạ để em tư vấn cho đúng, anh chị cho em hỏi nhanh ba điều: ngân sách anh chị muốn chi khoảng bao nhiêu; anh chị dùng máy nhiều vào việc gì nhất, chụp hình, quay phim, chơi game hay chỉ nghe gọi lướt mạng; và anh chị dự kiến dùng chiếc máy này khoảng bao lâu. Có ba thông tin đó em sẽ nói rõ dòng anh chị đang nhắm có hợp với mình không, hay có dòng khác đáng cân nhắc hơn, tránh trường hợp mua dư nhu cầu hoặc tiết kiệm quá rồi sau này lại thấy thiếu. Còn giá và tình trạng máy đang có thì anh chị bấm nút nhắn Zalo hoặc nút gọi ở phía dưới màn hình, nhân viên bên em báo chính xác cho mình ngay ạ.",
+    hien:''
+  },
+  {
     id:"phan-van-nhieu-dong", goi:"Phân vân nhiều dòng, chưa biết chọn máy nào",
     kw:[["tu van dong nao",9],["tu van dong may nao",9],["so sanh",8],["khac gi nhau",8],["nen chon cai nao",8],["may nao tot hon",8],["may nao hop",8],["muoi lam voi muoi sau",8],["muoi hai voi muoi ba",8],["15 va 16",8],["12 va 13",8],["tu van giup anh",8],["tu van cho anh",8],["giua iphone",7],["chua biet chon",9],["chon may nao",8],["nen mua may nao",8],["nhieu dong qua",9],["dong nao hop",8],["tu van giup em chon",8],["phan van qua",8],["roi qua khong biet",8],["can tu van iphone",10],["can tu van",9],["tu van iphone",10],["tu van may",9],["tu van giup",9],["mua dong nao",10],["mua may dong nao",12],["nen mua dong nao",12],["dong nao",7],["lay may nao",9],["may nao gio",8],["mua iphone nao",10],["chon dum",8],["chon giup",8],["goi y giup",8],["khong biet mua gi",9],["muon mua iphone",8],["dinh mua iphone",8],["mua may moi",6]],
     noi:"Dạ anh chị đang cân nhiều dòng thì mình đừng chọn vội ạ. Em giúp mình lọc cho nhanh. Anh chị cho em ba thông tin: ngân sách mình muốn chi khoảng bao nhiêu; mình ưu tiên điều gì nhất khi mua máy; và mình dự kiến dùng chiếc này khoảng bao lâu. Có ba thông tin đó em sẽ lọc xuống còn một tới hai dòng phù hợp nhất cho anh chị, tránh trường hợp mình mua dư nhu cầu hoặc tiết kiệm quá rồi sau này lại thấy thiếu. Sau khi chọn được dòng phù hợp, em sẽ tư vấn tiếp tình trạng máy và toàn bộ quyền lợi bảo hành của Hưng Phát Luxury để anh chị cân nhắc đầy đủ rồi mới quyết định ạ.",
@@ -802,7 +808,7 @@ const KHO = [
   },
   {
     id:"gia", goi:"Máy giá bao nhiêu?",
-    kw:[["iphone 14",5],["iphone 13",5],["iphone 16",5],["pro max",5],["bao nhieu",4],["gia bao nhieu",6],["bao nhieu tien",6],["gia sao",5],["gia the nao",5],["gia may",5],["nhieu tien",5],["iphone 15",5],["muoi lam pro",5],["con hang",4],["con may khong",4]],
+    kw:[["gia bao nhieu",9],["bao nhieu tien",9],["gia sao",8],["gia the nao",8],["gia may",8],["nhieu tien",8],["gia nhieu",8],["nhieu vay",6],["may nhieu",6],["con hang khong",8],["con may khong",7],["con hang",6],["bao nhieu",4]],
     noi:"Dạ giá máy thay đổi thường xuyên nên em không báo con số cố định ở đây được. Để phản hồi anh chị chính xác nhất và nhanh nhất, anh chị bấm nút nhắn Zalo hoặc nút gọi ở phía dưới màn hình, nhân viên bên em sẽ phản hồi anh chị ngay, kèm hình và video kiểm tra của đúng chiếc máy đang có tại chi nhánh gần anh chị.",
     hien:'Dạ giá thay đổi theo tình trạng từng máy nên em không báo một con số cố định ở đây được — báo chung dễ làm anh/chị hiểu nhầm. Anh/chị nhắn Zalo <b>tên máy, dung lượng và chi nhánh gần nhà</b>, em gửi giá đúng chiếc máy đang có kèm hình và video kiểm tra.'
   },
@@ -892,9 +898,39 @@ function timCauTraLoi(cauHoi){
     for(const [tu, d] of m.kw) if(coCum(q, tu)) diem += d + (tu.split(" ").length - 1) * 1.5;  // cụm càng dài càng đáng tin
     if(diem > diemCao){ diemCao = diem; best = m; }
   }
+  // Khách nhắc tên đời máy thì phải xem khách MUỐN GÌ trước.
+  // Trước đây tên máy kéo hết về câu báo giá: hỏi so sánh cũng ra giá, muốn mua cũng ra giá.
+  const soDoi = demDoiMay(q);
+  if(soDoi >= 1){
+    const hoiGia = ["gia bao nhieu","bao nhieu tien","gia sao","gia the nao","gia may",
+                    "nhieu tien","gia nhieu","con hang","con may khong"]
+                   .some(t => coCum(q, t));
+    const hoiSoSanh = ["so sanh","khac nhau","khac gi","hay la","nen chon","nen lay",
+                       "cai nao","may nao","tot hon","hon nhau","voi con","chon cai nao"]
+                      .some(t => coCum(q, t));
+    const hoiMua = ["muon mua","can mua","dinh mua","tinh mua","tu van","dang nham",
+                    "co tot khong","the nao","co nen","dang quan tam","cho anh hoi",
+                    "cho em hoi","dang can"].some(t => coCum(q, t));
+    // hỏi giá hay hỏi còn hàng thì luôn mời bấm Zalo, cửa hàng không báo giá ở đây
+    if(hoiGia && !coCum(q,"tra gop")){ const r = KHO.find(m=>m.id==="gia"); if(r) return r; }
+    if(!hoiGia){
+      if(soDoi >= 2 || hoiSoSanh){
+        // có bài riêng cho vài cặp hay gặp, còn lại vào bài lọc chung
+        if(coCum(q,"13") && coCum(q,"14")){ const r = KHO.find(m=>m.id==="phan-van-13-14"); if(r) return r; }
+        if(coCum(q,"14") && coCum(q,"15")){ const r = KHO.find(m=>m.id==="phan-van-14-15"); if(r) return r; }
+        const r = KHO.find(m=>m.id==="phan-van-nhieu-dong"); if(r) return r;
+      }
+      // khách chỉ nêu một dòng mà lại rơi vào bài so sánh cặp thì lệch ý,
+      // đưa về bài hỏi nhu cầu quanh chính dòng khách đang nhắm
+      const lechSangBaiSoSanh = best && best.id.indexOf("phan-van-") === 0;
+      if(hoiMua || diemCao < 5.5 || lechSangBaiSoSanh){
+        const r = KHO.find(m=>m.id==="tu-van-theo-dong"); if(r) return r;
+      }
+    }
+  }
   if(diemCao >= 5.5) return best;
   // chưa khớp gì nhưng khách nhắc từ hai đời máy trở lên: đưa vào bài tư vấn chọn máy
-  if(demDoiMay(q) >= 2) return KHO.find(m => m.id === "phan-van-nhieu-dong") || null;
+  if(soDoi >= 2) return KHO.find(m => m.id === "phan-van-nhieu-dong") || null;
   return null;
 }
 
