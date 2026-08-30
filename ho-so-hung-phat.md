@@ -18,6 +18,16 @@ Sản phẩm chính: iPhone 99% (máy đã qua sử dụng, còn rất mới, đ
 - CN4 — Thị trấn Sóc Xoài · 0767 68 66 88
 
 Bốn chi nhánh áp dụng chung chính sách bảo hành, cam kết ZIN và chương trình thu cũ đổi mới.
+
+**Nhân sự chi nhánh Sóc Xoài:** quản lý là **bé Thư** — trẻ, xinh xắn, tư vấn nhiệt tình và chuyên nghiệp. Cùng chi nhánh còn có **bạn Midu** và **bạn Cẩm Tú**, cũng trẻ trung, xinh xắn, nhiệt tình. Khách hỏi về chi nhánh Sóc Xoài thì giới thiệu tên các bạn để khách ghé gặp cho yên tâm.
+
+**Nhân sự chi nhánh Tắc Cậu (vòng xoay Tắc Cậu):** quản lý là **bé Vy** — trẻ trung, xinh xắn, tư vấn nhiệt tình và chuyên nghiệp. Hai bạn bán hàng là **bạn Tài** và **bé My**, nhanh nhẹn, vui vẻ, nhiệt tình.
+
+**Nhân sự chi nhánh Giồng Riềng (đường Hùng Vương):** quản lý là **bạn Tỷ** — trẻ trung, tư vấn nhiệt tình và chuyên nghiệp. Hai bạn bán hàng là **bạn Loan** và **bạn Kim Y**, xinh xắn, nhanh nhẹn, nhiệt tình.
+
+**Nhân sự chi nhánh Thạnh Lộc (khu công nghiệp Thạnh Lộc):** quản lý là **bạn Thu** — trẻ trung, tư vấn nhiệt tình và chuyên nghiệp. Bán hàng có **bé Nhy, bạn Lộc, bạn Nhựt, bạn Phong** — nhanh nhẹn, vui vẻ, nhiệt tình.
+
+> Lưu ý phân biệt: **bé Thư** là quản lý Sóc Xoài, **bạn Thu** là quản lý Thạnh Lộc — hai người khác nhau.
 Mua ở chi nhánh nào cũng bảo hành được ở chi nhánh khác.
 
 ## 2. Năm cam kết — mua máy không lo rủi ro
