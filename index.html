@@ -20,6 +20,7 @@
     --amber:#C8891B; --amber-soft:#F8EEDA;
     --alert:#B4462F; --alert-soft:#FBEAE5;
     --shadow:0 1px 2px rgba(22,33,31,.06), 0 10px 28px -18px rgba(22,33,31,.4);
+    --mic-ink:#FFFFFF;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
@@ -29,6 +30,7 @@
       --amber:#E3A84A; --amber-soft:#2A2416;
       --alert:#E58B72; --alert-soft:#2C1B16;
       --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.9);
+      --mic-ink:#08120F;
     }
   }
   :root[data-theme="dark"]{
@@ -38,6 +40,7 @@
     --amber:#E3A84A; --amber-soft:#2A2416;
     --alert:#E58B72; --alert-soft:#2C1B16;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.9);
+      --mic-ink:#08120F;
   }
 
   *{box-sizing:border-box}
@@ -50,44 +53,133 @@
   .wrap{max-width:640px;margin:0 auto;padding:0 16px}
 
   /* ---- đầu trang ---- */
-  header.top{background:var(--surface);border-bottom:1px solid var(--line);padding:18px 0 20px}
-  .brand{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-  .brand-mark{
-    width:34px;height:34px;flex:none;border-radius:9px;background:var(--teal);color:var(--surface);
-    display:grid;place-items:center;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:15px;
+  header.top{
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(120% 80% at 15% -10%, var(--teal-soft) 0%, transparent 58%),
+      radial-gradient(90% 70% at 95% 0%, var(--amber-soft) 0%, transparent 52%),
+      var(--surface);
+    border-bottom:1px solid var(--line);padding:16px 0 22px;
   }
-  .brand-name{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:17px;letter-spacing:-.01em}
-  .brand-sub{font-size:12.5px;color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;letter-spacing:.03em}
+  /* chỉ vàng mảnh chạy ngang dưới đáy đầu trang, tạo cảm giác chỉn chu */
+  header.top::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--amber) 22%,var(--teal) 50%,var(--amber) 78%,transparent);
+    opacity:.55;
+  }
+
+  .brand{display:flex;align-items:center;gap:11px;margin-bottom:15px}
+  .brand-mark{
+    width:38px;height:38px;flex:none;border-radius:11px;
+    background:linear-gradient(145deg,var(--teal) 0%,var(--teal-ink) 100%);
+    color:#fff;display:grid;place-items:center;position:relative;
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:15.5px;letter-spacing:.02em;
+    box-shadow:0 6px 16px -8px rgba(14,111,99,.9), inset 0 1px 0 rgba(255,255,255,.28);
+  }
+  .brand-mark::after{
+    content:"";position:absolute;inset:-2px;border-radius:13px;
+    border:1px solid var(--amber);opacity:.4;pointer-events:none;
+  }
+  .brand-name{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:17.5px;
+    letter-spacing:-.01em;line-height:1.2;
+  }
+  .brand-sub{
+    display:flex;align-items:center;gap:7px;margin-top:2px;
+    font-size:11.5px;color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;letter-spacing:.08em;
+  }
+  .brand-sub i{width:4px;height:4px;border-radius:50%;background:var(--amber);flex:none;font-style:normal}
+
   h1{
     font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
-    font-size:clamp(25px,6vw,34px);line-height:1.14;letter-spacing:-.02em;
-    margin:0 0 8px;text-wrap:balance;
+    font-size:clamp(26px,6.2vw,36px);line-height:1.12;letter-spacing:-.025em;
+    margin:0 0 9px;text-wrap:balance;
   }
-  h1 em{font-style:normal;color:var(--teal)}
+  h1 em{
+    font-style:normal;
+    background:linear-gradient(100deg,var(--teal) 0%,var(--teal-ink) 45%,var(--amber) 115%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
   .lede{margin:0;color:var(--ink-soft);font-size:15.5px;max-width:46ch}
 
+  /* ---- dải cam kết chạy ngang ---- */
+  .ticker{
+    position:relative;overflow:hidden;margin:16px 0 2px;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:9px 0;background:var(--surface);
+  }
+  .ticker::before,.ticker::after{
+    content:"";position:absolute;top:0;bottom:0;width:46px;z-index:2;pointer-events:none;
+  }
+  .ticker::before{left:0;background:linear-gradient(90deg,var(--surface),transparent)}
+  .ticker::after{right:0;background:linear-gradient(270deg,var(--surface),transparent)}
+  .ticker-run{
+    display:flex;width:max-content;gap:0;
+    animation:chay 34s linear infinite;
+  }
+  .ticker-run span{
+    display:inline-flex;align-items:center;gap:9px;padding:0 18px;white-space:nowrap;
+    font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:500;
+    letter-spacing:.055em;text-transform:uppercase;color:var(--ink-soft);
+  }
+  .ticker-run span::before{content:"◆";color:var(--amber);font-size:8px}
+  @keyframes chay{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media (prefers-reduced-motion: reduce){.ticker-run{animation:none}}
+
   /* ---- khu micro ---- */
-  .mic-zone{display:flex;flex-direction:column;align-items:center;gap:14px;padding:26px 0 8px}
-  .mic-holder{position:relative;width:132px;height:132px;display:grid;place-items:center}
+  .mic-zone{display:flex;flex-direction:column;align-items:center;gap:14px;padding:24px 0 8px}
+  .mic-holder{position:relative;width:212px;height:212px;display:grid;place-items:center}
+
+  /* vòng chữ quay quanh nút — quay chậm lúc chờ, nhanh hơn khi đang nghe */
+  .vong-chu{
+    position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
+    animation:quay 26s linear infinite;
+  }
+  .vong-chu text{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+    text-transform:uppercase;fill:var(--teal);opacity:.72;
+  }
+  body.listening .vong-chu{animation-duration:11s}
+  body.listening .vong-chu text{fill:var(--alert);opacity:.9}
+  body.speaking .vong-chu{animation-duration:17s}
+  body.speaking .vong-chu text{fill:var(--amber);opacity:.9}
+  @keyframes quay{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion: reduce){.vong-chu{animation:none}}
+
+  /* vòng viền mảnh nằm giữa nút và vòng chữ */
+  .vien-mo{
+    position:absolute;inset:38px;border-radius:50%;pointer-events:none;
+    border:1px solid var(--line);
+    background:radial-gradient(circle at 50% 35%, var(--teal-soft) 0%, transparent 72%);
+  }
+  .vien-mo::after{
+    content:"";position:absolute;inset:-9px;border-radius:50%;
+    border:1px dashed var(--teal);opacity:.20;
+  }
+
   .ring{
-    position:absolute;inset:0;border-radius:50%;border:2px solid var(--teal);opacity:0;pointer-events:none;
+    position:absolute;inset:44px;border-radius:50%;border:2px solid var(--teal);opacity:0;pointer-events:none;
   }
   body.listening .ring{animation:pulse 1.8s ease-out infinite}
   body.listening .ring:nth-child(2){animation-delay:.6s}
-  @keyframes pulse{0%{transform:scale(.72);opacity:.55}100%{transform:scale(1.08);opacity:0}}
+  @keyframes pulse{0%{transform:scale(.78);opacity:.55}100%{transform:scale(1.14);opacity:0}}
   @media (prefers-reduced-motion: reduce){body.listening .ring{animation:none;opacity:.3}}
 
   #micBtn{
-    width:104px;height:104px;border-radius:50%;border:none;cursor:pointer;
-    background:var(--teal);color:var(--surface);font:inherit;
+    width:112px;height:112px;border-radius:50%;border:none;cursor:pointer;
+    background:linear-gradient(150deg,var(--teal) 0%,var(--teal-ink) 100%);
+    color:var(--mic-ink);font:inherit;position:relative;z-index:1;
     display:grid;place-items:center;gap:2px;
-    box-shadow:0 10px 26px -12px rgba(14,111,99,.75);
-    transition:transform .12s ease, background .2s;
+    box-shadow:0 14px 32px -14px rgba(14,111,99,.95), inset 0 1px 0 rgba(255,255,255,.24);
+    transition:transform .12s ease, background .25s, box-shadow .25s;
   }
   #micBtn:active{transform:scale(.96)}
-  #micBtn svg{width:36px;height:36px;fill:currentColor}
-  body.listening #micBtn{background:var(--alert);box-shadow:0 10px 26px -12px rgba(180,70,47,.8)}
-  body.speaking #micBtn{background:var(--amber)}
+  #micBtn svg{width:38px;height:38px;fill:currentColor}
+  body.listening #micBtn{
+    background:linear-gradient(150deg,var(--alert) 0%,#8E3524 100%);color:#fff;
+    box-shadow:0 14px 32px -14px rgba(180,70,47,.95), inset 0 1px 0 rgba(255,255,255,.24);
+  }
+  body.speaking #micBtn{background:linear-gradient(150deg,var(--amber) 0%,#9A6712 100%);color:#fff}
   #micBtn:disabled{background:var(--surface-2);color:var(--ink-faint);box-shadow:none;cursor:not-allowed}
 
   .mic-label{font-weight:600;font-size:17px;text-align:center;min-height:26px}
@@ -215,14 +307,30 @@
       <div class="brand-mark">HP</div>
       <div>
         <div class="brand-name">Hưng Phát Luxury</div>
-        <div class="brand-sub">4 CHI NHÁNH · KIÊN GIANG</div>
       </div>
     </div>
     <h1>Hỏi bằng giọng nói, <em>nghe trả lời liền</em></h1>
     <p class="lede">Bấm nút micro <b>một lần</b> rồi hỏi thoải mái — ví dụ “Hưng Phát có bao nhiêu chi nhánh?”. Máy trả lời bằng giọng nói rồi tự mở micro nghe câu tiếp; hỏi xong bấm lại để dừng.</p>
+  </div>
 
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-run" id="tickerRun">
+      <span>100% máy có video kiểm tra ZIN bên trong</span>
+      <span>Không ZIN — hoàn tiền và tặng luôn máy</span>
+      <span>Bảo hành 1 đổi 1 trong 12 tháng</span>
+      <span>Bảo hành không cần tem ngoài</span>
+      <span>Trọn đời pin — ốp lưng — cường lực</span>
+    </div>
+  </div>
+
+  <div class="wrap">
     <div class="mic-zone">
       <div class="mic-holder">
+        <svg class="vong-chu" viewBox="0 0 212 212" aria-hidden="true">
+          <defs><path id="duongVong" d="M106,106 m-88,0 a88,88 0 1,1 176,0 a88,88 0 1,1 -176,0"/></defs>
+          <text><textPath href="#duongVong" startOffset="0" textLength="551" lengthAdjust="spacing">Hỏi Hưng Phát ◆ Nghe trả lời liền ◆</textPath></text>
+        </svg>
+        <span class="vien-mo"></span>
         <span class="ring"></span><span class="ring"></span>
         <button id="micBtn" type="button" aria-label="Bấm để nói câu hỏi">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3z"/><path d="M17.3 11a.9.9 0 0 0-1.8 0 3.5 3.5 0 0 1-7 0 .9.9 0 0 0-1.8 0 5.3 5.3 0 0 0 4.4 5.2V19H9.4a.9.9 0 0 0 0 1.8h5.2a.9.9 0 0 0 0-1.8h-1.7v-2.8A5.3 5.3 0 0 0 17.3 11z"/></svg>
@@ -270,20 +378,14 @@ const KHO = [
   },
   {
     id:"hai-noi-lo", goi:"Mua iPhone 99% sợ nhất điều gì?",
-    kw:[["so nhat",6],["lo nhat",6],["can luu y gi",6],["mua may can chu y",6],["kinh nghiem mua",6],["nen hoi gi",5],["mua iphone 99",6],["hai dieu",5],["can kiem tra gi",6]],
+    kw:[["so nhat",6],["lo nhat",6],["can luu y gi",6],["mua may can chu y",6],["kinh nghiem mua",6],["nen hoi gi",5],["mua iphone 99",6],["hai dieu",5],["hai noi lo",9],["noi lo",6],["can kiem tra gi",6]],
     noi:"Dạ mua ai phôn chín mươi chín phần trăm, khách sợ nhất hai điều: máy có còn zin thật không, và mất tem thì còn được bảo hành không. Bên em gỡ cả hai: một trăm phần trăm máy có video kiểm tra bên trong, và bảo hành không cần tem ngoài, tem bong rách hay mất thì quyền lợi vẫn còn nguyên ạ.",
     hien:''
   },
   {
     id:"giay-cam-ket", goi:"Giấy bảo hành ghi những gì?",
-    kw:[["giay bao hanh",13],["giay to bao hanh",9],["giay cam ket",6],["hop dong",5],["ghi nhung gi",5],["dieu khoan",6],["map mo",6],["co giay to gi",6],["viet giay",5]],
+    kw:[["giay bao hanh",13],["giay to bao hanh",9],["giay cam ket",13],["hop dong",5],["ghi nhung gi",5],["dieu khoan",6],["map mo",6],["co giay to gi",6],["viet giay",5]],
     noi:"Dạ mọi quyền lợi của anh chị đều ghi trên giấy, cầm lên đọc là hiểu rõ ngay. Không có điều khoản mập mờ, không tốn phí, không phụ thuộc tem ngoài, máy lỗi là đổi theo đúng chính sách. Anh chị giữ giấy cam kết cùng hoá đơn, khi cần thì mang tới bất kỳ chi nhánh nào của Hưng Phát, nhân viên đối chiếu rồi làm ngay cho anh chị.",
-    hien:''
-  },
-  {
-    id:"nam-cam-ket-day-du", goi:"Nghe đầy đủ 5 cam kết",
-    kw:[["nghe tiep",8],["noi tiep",8],["day du",6],["chi tiet",6],["ke het",6],["tung cam ket",8],["nam cam ket day du",9]],
-    noi:"Dạ em xin nói đầy đủ năm cam kết ạ. Cam kết một, một trăm phần trăm máy có video kiểm tra zin bên trong, quay chính chiếc máy anh chị chọn, không đợi khách yêu cầu hay bắt buộc xem. Cam kết hai, cam kết bằng văn bản, không zin hoàn tiền và tặng luôn máy. Cam kết ba, bảo hành một đổi một trong mười hai tháng, bao gồm cả nguồn, màn hình, main và phây ai đi, không tốn phí. Máy lỗi là đổi cây máy zin khác, không qua sửa chữa thay thế, không làm mất giá trị máy. Cam kết bốn, bảo hành không cần tem ngoài, không tốn phí, đầu tiên và duy nhất tại Kiên Giang. Cam kết năm, bảo hành trọn đời pin, ốp lưng, cường lực, không tốn phí, không giới hạn số lần, không cần mua thêm gói bảo hành.",
     hien:''
   },
   {
@@ -347,7 +449,7 @@ const KHO = [
   },
   {
     id:"video-zin", goi:"Làm sao biết máy còn ZIN?",
-    kw:[["lam sao biet may zin",6],["that su zin",6],["kiem chung",6],["sao biet zin that",6],["chung minh",5],["moi may deu co",6],["tat ca may",6],["100 may",6],["may nao cung co",6],["lam sao biet",5],["video kiem tra",6],["coi video",5],["bang chung",4],["kiem tra ben trong",6],["mo may",3],["sao biet may zin",6]],
+    kw:[["lam sao biet may zin",6],["that su zin",6],["kiem chung",6],["sao biet zin that",6],["chung minh",5],["moi may deu co",6],["tat ca may",6],["100 may",6],["may nao cung co",6],["lam sao biet",5],["video kiem tra zin",12],["video kiem tra",9],["video zin",9],["coi video",5],["bang chung",4],["kiem tra ben trong",6],["mo may",3],["sao biet may zin",6]],
     noi:"Dạ đừng vội tin người bán, hãy tin vào bằng chứng ạ. Bởi vì một chiếc máy đẹp keng bên ngoài chưa chắc đã zin bên trong. Vậy làm sao kiểm chứng? Tại Hưng Phát, một trăm phần trăm ai phôn chín mươi chín bắt buộc phải có video kiểm tra zin bên trong. Máy phải được kiểm tra và đạt tiêu chuẩn chất lượng của Hưng Phát mới được bán ra. Bên em chỉ bán ai phôn chín mươi chín loại một, zin keng, đẹp keng như mới. Không chỉ có video, anh chị còn có giấy kiểm định và cam kết bằng văn bản: không zin, hoàn tiền và tặng luôn máy. Vì vậy đừng chỉ hỏi người bán máy có zin không, mà hãy hỏi: có bằng chứng nào để tôi kiểm chứng không ạ.",
     hien:'Dạ đừng tin lời nói — anh/chị coi <b>video kiểm tra bên trong của đúng chiếc máy mình mua</b>. Mỗi chiếc iPhone đã qua sử dụng bên em bán ra đều được quay video trước khi bàn giao, mở cho anh/chị coi tại quầy và gửi qua Zalo để anh/chị giữ. Sau này bán lại máy, đưa video đó ra thì người mua tin liền.'
   },
@@ -359,8 +461,8 @@ const KHO = [
   },
   {
     id:"bao-hanh", goi:"Mua máy được bảo hành những gì?",
-    kw:[["bao hanh gi",6],["che do bao hanh",6],["bao hanh",4],["doi 1",5],["mot doi mot",5],["1 doi 1",5],["12 thang",5],["muoi hai thang",5],["bao lau",3],["bao hanh sao",6],["bao hanh the nao",6]],
-    noi:"Dạ bảo hành gồm hai phần. Một là bảo hành một đổi một trong mười hai tháng, bao gồm cả nguồn, màn hình, main và phây ai đi, không tốn phí. Máy lỗi là bên em đổi cây máy zin khác, không qua sửa chữa thay thế, không làm mất giá trị máy. Hai là bảo hành trọn đời pin, ốp lưng, cường lực, không tốn phí, không giới hạn số lần, không cần mua thêm gói bảo hành. Cả hai đều không cần tem ngoài ạ.",
+    kw:[["bao hanh gi",6],["che do bao hanh",6],["bao hanh",4],["doi 1",5],["mot doi mot",5],["1 doi 1",5],["12 thang",5],["muoi hai thang",5],["bao lau",3],["bao hanh sao",6],["bao hanh the nao",6],["nam cam ket",8],["cam ket gi",7],["cac cam ket",7],["tung cam ket",8],["nghe tiep",6],["noi tiep",6],["ke het",6]],
+    noi:"Dạ em xin nói đầy đủ năm cam kết của Hưng Phát và giải thích rõ từng cam kết cho anh chị ạ. Cam kết một, một trăm phần trăm máy có video kiểm tra zin bên trong. Video quay chính chiếc máy anh chị chọn, không phải chỉ vài máy đẹp mới có, và bên em không đợi khách yêu cầu hay bắt buộc xem. Video quay lại quá trình mở máy kiểm tra linh kiện bên trong, cho anh chị thấy tận mắt máy còn nguyên linh kiện gốc từ nhà sản xuất hay đã bị thay đồ ngoài. Bên ngoài thì máy nào cũng đẹp, nhưng bên trong mới quyết định anh chị mua đúng hay mua nhầm. Nhân viên mở cho anh chị xem tại quầy và gửi qua Zalo để anh chị giữ, sau này anh chị bán lại máy thì đưa video đó ra, người mua tin ngay. Cam kết hai, cam kết bằng văn bản, không zin hoàn tiền và tặng luôn máy. Nghĩa là nếu chiếc máy anh chị mua không đúng zin như bên em nói, bên em hoàn lại toàn bộ tiền và tặng luôn chiếc máy đó cho anh chị. Cam kết này ghi trên giấy chứ không phải nói miệng. Cam kết ba, bảo hành một đổi một trong mười hai tháng, bao gồm cả nguồn, màn hình, main và phây ai đi, không tốn phí. Máy lỗi thuộc chính sách là bên em đổi cây máy zin khác, không qua sửa chữa thay thế. Nghĩa là bên em không tháo máy anh chị ra sửa rồi trả lại, vì sửa chữa hay thay thế sẽ làm mất giá trị chiếc máy của anh chị. Cam kết bốn, bảo hành không cần tem ngoài, không tốn phí, đầu tiên và duy nhất tại Kiên Giang. Vì sao điều này quan trọng: nơi nào bắt giữ tem thì cửa hàng được bảo vệ, còn rủi ro thuộc về khách hàng. Chỉ cần tem bong, rách hoặc mất là toàn bộ quyền lợi bảo hành có thể mất theo, hàng triệu đồng chi phí cuối cùng khách tự gánh. Tại Hưng Phát anh chị không cần giữ tem vẫn giữ nguyên quyền lợi, và máy chín mươi chín bên em tuyệt đối không dán tem ngoài nên cũng không lo mất thẩm mỹ máy. Cam kết năm, bảo hành trọn đời pin, ốp lưng và cường lực, không tốn phí, không giới hạn số lần, không cần mua thêm gói bảo hành. Cụ thể là pin xuống dưới tám mươi phần trăm hoặc pin yếu tụt nhanh bất thường, cường lực nứt vỡ, ốp lưng ố vàng thì anh chị mang máy qua, bên em thay miễn phí, chừng nào anh chị còn dùng chính chiếc máy mua tại Hưng Phát. Em xin nói rõ thêm một điều, máy hư do rơi vỡ, va đập hay vào nước thì không thuộc phạm vi một đổi một. Trường hợp đó anh chị cứ mang qua, bên em kiểm tra rồi báo hướng xử lý và chi phí trước khi làm ạ.",
     hien:'Dạ chính sách gồm hai phần:<ul><li><b>1 đổi 1 trong 12 tháng</b> cho nguồn, màn hình, main, Face ID — đổi máy <b>cùng dòng, cùng dung lượng, tình trạng tương đương</b>.</li><li><b>Trọn đời</b> pin, ốp lưng, cường lực.</li></ul>Không tốn phí, không cần tem ngoài. Áp dụng cho lỗi phát sinh từ máy; không áp dụng khi máy rơi vỡ, vào nước hoặc đã tháo mở ở nơi khác.'
   },
   {
@@ -402,7 +504,7 @@ const KHO = [
   {
     id:"uu-dai", goi:"Mua máy được tặng gì?",
     kw:[["mua may tang",8],["tang gi khong",7],["chuong trinh thang nay",6],["nam uu dai",6],["dang co gi",5],["tang gi",6],["tang qua",6],["qua gi",6],["qua tang",6],["khuyen mai",6],["uu dai",6],["combo",4],["trung thu",5],["co qua khong",5],["duoc tang",6]],
-    noi:"Dạ mừng đại lễ Quốc khánh mùng hai tháng chín và mùa Trung Thu, mua ai phôn tại Hưng Phát nhận ngay năm ưu đãi. Một, rút lì xì một trăm phần trăm là trúng, một triệu hoặc năm trăm ngàn. Hai, tặng thêm năm trăm ngàn đồng khi thu cũ lên đời. Ba, tặng thêm hộp bánh Trung Thu Kinh Đô cao cấp. Bốn, tặng thêm thùng bia Heineken chất lượng. Năm, tặng thêm combo quà trị giá hai triệu đồng.",
+    noi:"Dạ mừng đại lễ Quốc khánh mùng hai tháng chín và mùa Trung Thu, mua ai phôn tại Hưng Phát nhận ngay năm ưu đãi ạ. Em xin nói rõ từng ưu đãi cho anh chị. Ưu đãi một, rút lì xì một trăm phần trăm là trúng, một triệu hoặc năm trăm ngàn. Anh chị nhận tiền mặt trực tiếp tại quầy, mỗi khách mua máy được rút một lượt. Giá máy đã chốt trước khi rút nên tiền lì xì không bị trừ vào giá máy ạ. Ưu đãi hai, tặng thêm năm trăm ngàn đồng khi thu cũ lên đời. Nghĩa là anh chị mang máy đang dùng tới đổi máy mới, thì ngoài số tiền thu chiếc máy cũ, anh chị được cộng thêm năm trăm ngàn nữa. Ưu đãi ba, tặng thêm hộp bánh Trung Thu Kinh Đô cao cấp. Ưu đãi bốn, tặng thêm thùng bia Heineken chất lượng. Ưu đãi năm, tặng thêm combo quà trị giá hai triệu đồng. Danh sách chi tiết từng món trong combo thì tuỳ chương trình đang áp dụng, anh chị bấm nút nhắn Zalo hoặc nút gọi ở phía dưới màn hình, nhân viên bên em báo chính xác combo quà cho chiếc máy anh chị chọn ạ. Năm ưu đãi này áp dụng chung cho cả hai dịp Quốc khánh mùng hai tháng chín và Trung Thu ạ.",
     hien:'Dạ chương trình tháng 8 – Trung Thu tặng:<ul><li>Hộp bánh Trung Thu</li><li>Một thùng sinh tố lúa mạch <i>(khách từ 18 tuổi)</i></li><li>Combo quà phụ kiện đi kèm máy</li><li>Một lượt rút lì xì cho mỗi hoá đơn</li></ul>Quà và thể lệ theo từng đợt có thể thay đổi — gọi hotline để nghe chương trình đang chạy và thể lệ áp dụng.'
   },
   {
@@ -674,6 +776,13 @@ const elNote = document.getElementById("note");
 const elNoteText = document.getElementById("noteText");
 const elHeard = document.getElementById("heard");
 
+// Dải cam kết chạy ngang: nhân đôi nội dung để chạy nối vòng không bị hụt khoảng
+(function nhanDoiDaiChay(){
+  const dai = document.getElementById("tickerRun");
+  if(!dai) return;
+  dai.innerHTML = dai.innerHTML + dai.innerHTML;
+})();
+
 let daMoKhoa = false, dangDoc = false;
 let lanCuoiPhat = null, demImLang = null;
 let lichSu = [];                       // vài lượt gần nhất, để máy hiểu khách đang nói tiếp chuyện gì
@@ -739,10 +848,14 @@ function ngungPhat(){
   dangDoc = false;
   document.body.classList.remove("speaking");
 }
+// Câu đã sửa lời nhưng chưa thu kịp giọng mới thì mượn tạm file cũ gần nghĩa nhất,
+// đừng để khách nghe câu thiếu. Bỏ dòng tương ứng sau khi thu xong giọng mới.
+const MUON_TAM = { "bao-hanh": "nam-cam-ket-day-du" };
+
 function doc(id){
   // Nếu chưa có file giọng cho chủ đề này (chưa thu kịp) thì đừng để khách nghe im lặng:
   // hỏi bộ trả lời của cửa hàng, không được thì phát câu dự phòng.
-  const duong = "audio/" + GIONG + "/" + id + ".mp3";
+  const duong = "audio/" + GIONG + "/" + (MUON_TAM[id] || id) + ".mp3";
   fetch(duong, {method:"HEAD"}).then(r => {
     if(r.ok){ phat(duong); return; }
     const m = KHO.find(x => x.id === id);
