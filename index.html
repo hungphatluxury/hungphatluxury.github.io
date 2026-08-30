@@ -1064,7 +1064,9 @@ async function hoiBoTraLoi(cauHoi){
   try{
     const hen = new AbortController();
     dangHoi = hen;
-    setTimeout(() => hen.abort(), 12000);      // quá 12 giây thì thôi, đừng bắt khách chờ
+    // Bộ trả lời mất khoảng 10 giây: nghĩ câu 3 giây, Vbee đọc thành tiếng 7 giây.
+    // Hạn 12 giây quá sát nên khách hay rơi vào câu dự phòng, nới lên cho chắc.
+    setTimeout(() => hen.abort(), 22000);
     const tra = await fetch(MAY_TRA_LOI, {
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({cau: cauHoi, lich_su: lichSu}), signal: hen.signal
