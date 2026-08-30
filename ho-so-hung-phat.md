@@ -50,7 +50,7 @@ Máy hư do rơi vỡ, va đập, vào nước thì **không** thuộc phạm vi
 
 Mua iPhone nhận ngay 5 ưu đãi (áp dụng chung cho cả hai dịp):
 
-1. **Rút lì xì 100% là trúng** — 1 triệu hoặc 500k, nhận tiền mặt trực tiếp tại quầy, mỗi khách mua máy được rút một lượt. Giá máy đã chốt trước nên tiền lì xì không bị trừ vào giá máy.
+1. **Rút lì xì 100% là trúng** — 1 triệu hoặc 500k, nhận tiền mặt trực tiếp tại quầy, mỗi khách mua máy được rút một lượt. Giá máy đã chốt trước khi rút nên tiền lì xì là khoản riêng của khách: khách cầm tiền mặt, hoặc **muốn trừ thẳng vào tiền máy cũng được**.
 2. **Tặng thêm 500.000 đồng khi thu cũ lên đời**
 3. **Tặng thêm hộp bánh Trung Thu Kinh Đô cao cấp**
 4. **Tặng thêm thùng bia Heineken chất lượng**
@@ -58,7 +58,7 @@ Mua iPhone nhận ngay 5 ưu đãi (áp dụng chung cho cả hai dịp):
 
 ## 5. Thu cũ đổi mới
 
-Khách mang máy tới, nhân viên kiểm ngoại hình, pin và linh kiện ngay trước mặt khách rồi báo giá, trừ thẳng vào giá máy mới. Có trường hợp máy khách đang cầm đủ giá để đổi mà không phải bù thêm — tuỳ từng máy, không phải máy nào cũng vậy.
+**Hưng Phát thu giá cao nhất.** Khách mang máy tới, nhân viên kiểm ngoại hình, pin và linh kiện ngay trước mặt khách rồi báo giá, trừ thẳng vào giá máy mới. Có trường hợp máy khách đang cầm đủ giá để đổi mà không phải bù thêm — tuỳ từng máy, không phải máy nào cũng vậy.
 
 ## 6. Trả góp
 
