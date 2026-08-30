@@ -704,7 +704,7 @@ const KHO = [
   {
     id:"tu-van-theo-dong", goi:"Tư vấn theo dòng máy khách đang nhắm",
     kw:[],
-    noi:"Dạ để em tư vấn cho đúng, anh chị cho em hỏi nhanh ba điều: ngân sách anh chị muốn chi khoảng bao nhiêu; anh chị dùng máy nhiều vào việc gì nhất, chụp hình, quay phim, chơi game hay chỉ nghe gọi lướt mạng; và anh chị dự kiến dùng chiếc máy này khoảng bao lâu. Có ba thông tin đó em sẽ nói rõ dòng anh chị đang nhắm có hợp với mình không, hay có dòng khác đáng cân nhắc hơn, tránh trường hợp mua dư nhu cầu hoặc tiết kiệm quá rồi sau này lại thấy thiếu. Còn giá và tình trạng máy đang có thì anh chị bấm nút nhắn Zalo hoặc nút gọi ở phía dưới màn hình, nhân viên bên em báo chính xác cho mình ngay ạ.",
+    noi:"Dạ được anh chị, em tư vấn thẳng dòng đó cho mình luôn. Em hỏi nhanh đúng một điều thôi: anh chị dùng máy nhiều vào việc gì nhất, chụp hình, chơi game, hay chủ yếu nghe gọi lướt mạng ạ? Biết được cái đó là em nói ngay dòng anh chị đang nhắm có hợp với mình không, hay có dòng khác đáng tiền hơn.",
     hien:''
   },
   {
@@ -1096,7 +1096,7 @@ async function hoiBoTraLoi(cauHoi){
   guiLenh("im");
   micLabel.textContent = "Đang trả lời…";
   document.body.classList.add("speaking");
-  micHint.textContent = "Em đang xem lại cho chính xác…";   // báo bằng chữ, không nói ra tiếng
+  micHint.textContent = "Dạ em đang trả lời anh chị…";      // báo bằng chữ, không nói ra tiếng
   try{
     const hen = new AbortController();
     dangHoi = hen;
