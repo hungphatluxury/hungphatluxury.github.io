@@ -222,6 +222,9 @@
   .ask-col{display:flex;flex-direction:column;gap:7px;min-width:0}
   .col-label{
     display:flex;align-items:center;gap:8px;margin-bottom:3px;
+  }
+  .ask + .col-label{margin-top:16px}
+  .col-label{
     font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.07em;
     text-transform:uppercase;color:var(--ink-faint);
   }
@@ -1150,27 +1153,29 @@ function baoMoTrinhDuyet(){
 /* Danh sách câu hỏi bấm để nghe — hiện khi micro không dùng được */
 // Xếp theo mạch khách mua máy: bên trái là nỗi lo trước khi xuống tiền,
 // bên phải là quyền lợi và thủ tục sau khi đã chọn máy.
-const NHOM_CAU_HOI = [
-  ["Trước khi mua — gỡ nỗi lo", [
-    ["video-zin",         "Làm sao biết máy còn ZIN?"],
-    ["nguoi-ban-noi-zin", "Người bán nói ZIN, có nên tin?"],
-    ["cam-ket",           "Lỡ mua nhằm máy không ZIN thì sao?"],
-    ["hai-noi-lo",        "Mua iPhone 99% sợ nhất điều gì?"],
-    ["chat-luong-may",    "Máy có bị dựng, kích pin không?"],
-    ["gia-cao",           "Giá bên em cao hơn chỗ khác?"],
-    ["cung-may-gia-khac", "Cùng một máy sao giá mỗi nơi mỗi khác?"],
-    ["chi-nhanh",         "Có bao nhiêu chi nhánh, ở đâu?"]
-  ]],
-  ["Sau khi mua — quyền lợi", [
-    ["bao-hanh",           "Mua máy được bảo hành những gì?"],
-    ["tem",                "Rách tem có mất bảo hành không?"],
-    ["may-loi-sua-hay-doi","Máy lỗi thì sửa hay đổi máy khác?"],
-    ["pin",                "Pin chai có được thay miễn phí?"],
-    ["op-cuong-luc",       "Cường lực vỡ, ốp ố vàng có thay không?"],
-    ["uu-dai",             "Mua máy được tặng gì?"],
-    ["thu-cu",             "Có thu máy đang xài để lên đời không?"],
-    ["tra-gop",            "Trả góp cần giấy tờ gì?"]
-  ]]
+const COT_CAU_HOI = [
+  [ ["Quyền lợi khi mua máy — 5 cam kết", [
+      ["bao-hanh",           "Mua máy được bảo hành những gì?"],
+      ["video-zin",          "Làm sao biết máy còn ZIN?"],
+      ["nguoi-ban-noi-zin",  "Người bán nói ZIN, có nên tin?"],
+      ["sao-khong-doi-khach","Sao không đợi khách yêu cầu mới kiểm tra?"],
+      ["cam-ket",            "Lỡ mua nhằm máy không ZIN thì sao?"],
+      ["giay-cam-ket",       "Giấy cam kết ghi những gì?"],
+      ["may-loi-sua-hay-doi","Máy lỗi thì sửa hay đổi máy khác?"],
+      ["tem",                "Rách tem có mất bảo hành không?"],
+      ["pin",                "Pin chai có được thay miễn phí?"],
+      ["op-cuong-luc",       "Cường lực vỡ, ốp ố vàng có thay không?"]
+    ]] ],
+  [ ["Quà tặng dịp Quốc khánh & Trung Thu", [
+      ["uu-dai",           "Mua máy dịp lễ được tặng gì?"],
+      ["li-xi",            "Rút lì xì là sao, ai cũng trúng?"],
+      ["combo-qua-gom-gi", "Combo quà 2 triệu gồm những gì?"]
+    ]],
+    ["Mẹo xài iPhone", [
+      ["pin-tut-nhanh", "Máy tụt pin nhanh thì làm sao?"],
+      ["may-chay-cham", "Máy chạy chậm, giật lag phải làm gì?"],
+      ["may-vao-nuoc",  "Lỡ máy vào nước thì xử lý sao?"]
+    ]] ]
 ];
 
 function veDanhSachCauHoi(){
@@ -1182,20 +1187,22 @@ function veDanhSachCauHoi(){
   nhan.textContent = "Bấm câu hỏi để nghe trả lời";
   const hop = document.createElement("div");
   hop.className = "asks";
-  NHOM_CAU_HOI.forEach(([tenNhom, muc]) => {
+  COT_CAU_HOI.forEach(nhomTrongCot => {
     const cot = document.createElement("div");
     cot.className = "ask-col";
-    const nhanCot = document.createElement("div");
-    nhanCot.className = "col-label";
-    nhanCot.textContent = tenNhom;
-    cot.appendChild(nhanCot);
-    muc.forEach(([id, chu]) => {
-      if(!KHO.some(m => m.id === id)) return;   // bỏ qua chủ đề đã gộp hoặc đổi tên
-      const b = document.createElement("button");
-      b.className = "ask"; b.type = "button";
-      b.textContent = chu;
-      b.addEventListener("click", () => { moKhoaLoa(); doc(id); });
-      cot.appendChild(b);
+    nhomTrongCot.forEach(([tenNhom, muc]) => {
+      const nhanCot = document.createElement("div");
+      nhanCot.className = "col-label";
+      nhanCot.textContent = tenNhom;
+      cot.appendChild(nhanCot);
+      muc.forEach(([id, chu]) => {
+        if(!KHO.some(m => m.id === id)) return;   // bỏ qua chủ đề đã gộp hoặc đổi tên
+        const b = document.createElement("button");
+        b.className = "ask"; b.type = "button";
+        b.textContent = chu;
+        b.addEventListener("click", () => { moKhoaLoa(); doc(id); });
+        cot.appendChild(b);
+      });
     });
     hop.appendChild(cot);
   });
